@@ -1,0 +1,82 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-tab-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-tab-container",
+                    data.itemsAlign | get_modifier("nuc-o-tab-container--align")
+                ]
+            }
+        }) %}
+        {% set htmlAttributesTablist = {
+            classList: [
+                "nuc-o-tab-container__items"
+            ],
+            "role": "tablist",
+            "aria-label": data.textAriaLabel
+        } %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-o-tab-container__navigation">
+                {{ aButton.render({
+                    component: "nucleus/a-button",
+                    htmlAttributes: {
+                        classList: [
+                            "nuc-o-tab-container__button-previous"
+                        ]
+                    },
+                    embedded: [
+                        {
+                            component: "nucleus/a-icon",
+                            htmlAttributes: {
+                                classList: [
+                                    "nuc-o-tab-container__icon-left"
+                                ]
+                            },
+                            id: "nucleus/left"
+                        }
+                    ]
+                }) }}
+                <div class="nuc-o-tab-container__navigation-wrapper">
+                    <div {{ render_attributes(htmlAttributesTablist) }}>
+                        {{ core.renderComponents(data.embeddedItems) }}
+                    </div>
+                </div>
+                {{ aButton.render({
+                    component: "nucleus/a-button",
+                    htmlAttributes: {
+                        classList: [
+                            "nuc-o-tab-container__button-next"
+                        ]
+                    },
+                    embedded: [
+                        {
+                            component: "nucleus/a-icon",
+                            htmlAttributes: {
+                                classList: [
+                                    "nuc-o-tab-container__icon-right"
+                                ]
+                            },
+                            id: "nucleus/right",
+                        }
+                    ]
+                }) }}
+            </div>
+            <div class="nuc-o-tab-container__contents">
+                {{ core.renderComponents(data.embeddedContent) }}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

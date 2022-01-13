@@ -1,0 +1,33 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-teaser-layout-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-teaser-layout-container",
+                    data.layout | get_modifier("nuc-o-teaser-layout-container--length-" ~ data.embedded | length ~ "-layout")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-o-teaser-layout-container__container">
+                {% for _teaser in data.embedded %}
+                    <div class="nuc-o-teaser-layout-container__item">
+                        {{ core.renderComponent(_teaser) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,47 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-breadcrumb-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-breadcrumb-item"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    class: "nuc-m-breadcrumb-item__icon"
+                },
+                id: "nucleus/right",
+                size: "inherit"
+            }) }}
+
+            {% if data.objectAnchor is not empty %}
+                {{ aAnchor.render ( data.objectAnchor | merge_data ({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        class: "nuc-m-breadcrumb-item__anchor"
+                    },
+                    embedded: [ data.text ]
+                })) }}
+            {% else %}
+                {{ data.text }}
+            {% endif %}
+        </li>
+    {% endif %}
+{% endmacro %}

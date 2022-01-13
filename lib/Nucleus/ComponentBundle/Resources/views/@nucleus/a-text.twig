@@ -1,0 +1,43 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-text", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _tag = data.tag %}
+        {% if _tag is empty %}
+            {% if data.type == "headline-1" %} {% set _tag = "h1" %}
+            {% elseif data.type == "headline-2" %} {% set _tag = "h2" %}
+            {% elseif data.type == "headline-3" %} {% set _tag = "h3" %}
+            {% elseif data.type == "headline-4" %} {% set _tag = "h4" %}
+            {% elseif data.type == "headline-5" %} {% set _tag = "h5" %}
+            {% elseif data.type == "headline-6" %} {% set _tag = "h6" %}
+            {% else %} {% set _tag = "span" %} {% endif %}
+        {% endif %}
+
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-text",
+                    data.type | get_modifier("nuc-a-text--type"),
+                    data.align | get_modifier("nuc-a-text--align")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <{{ _tag }} {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.embedded is not empty %}
+                {{ core.renderComponents(data.embedded) }}
+            {% elseif data.content is not empty %}
+                {{ core.renderContent(data.content, data.isRawContent) }}
+            {% endif %}
+        </{{ _tag }}>
+    {% endif %}
+{% endmacro %}

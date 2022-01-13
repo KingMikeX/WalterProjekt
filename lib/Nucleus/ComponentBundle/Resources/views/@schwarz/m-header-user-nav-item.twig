@@ -1,0 +1,50 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-header-user-nav-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-m-header-user-nav-item"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% set embeddedAnchor %}
+                <div class="scwz-m-header-user-nav-item__icon-wrapper">
+                    {{ aIcon.render(data.objectIcon | merge_data({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "scwz-m-header-user-nav-item__icon"
+                        },
+                        size: "24"
+                    })) }}
+                    {% if data.textAddon is not empty %}
+                        <span class="scwz-m-header-user-nav-item__addon">{{ data.textAddon }}</span>
+                    {% endif %}
+                </div>
+            {% endset %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: {
+                    class: "scwz-m-header-user-nav-item__anchor"
+                },
+                embedded: [
+                    embeddedAnchor
+                ]
+            })) }}
+        </li>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,27 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-container",
+                    data.width | get_modifier("nuc-a-container--width")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <{{ data.tag }} {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </{{ data.tag }}>
+    {% endif %}
+{% endmacro %}

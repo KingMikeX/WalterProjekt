@@ -1,0 +1,40 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-header-sub-nav-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-m-header-sub-nav-item",
+                    "scwz-m-header-nav-item",
+                    data.isActive | get_modifier("scwz-m-header-sub-nav-item--active")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: {
+                    classList: [
+                        "scwz-m-header-sub-nav-item__anchor",
+                        "scwz-m-header-nav-item__anchor"
+                    ]
+                },
+                embedded: [
+                    data.text
+                ]
+            })) }}
+        </li>
+    {% endif %}
+{% endmacro %}

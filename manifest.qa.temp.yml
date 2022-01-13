@@ -1,0 +1,16 @@
+applications: 
+  - name: Symfony5Mike-temp-qa
+    buildpacks: 
+      - https://github.com/cloudfoundry/php-buildpack 
+    memory: 2GB 
+    disk_quota: 4GB 
+    instances: 1 
+    env: 
+      SYMFONY_ENV: qa 
+      APP_ENV: qa 
+      TZ: Europe/Berlin 
+    routes: 
+      - route: https://Symfony5Mike-temp-qa.apps.02.cf.eu01.stackit.schwarz
+    services: 
+        - Symfony5Mike-mysql-qa
+        - Symfony5Mike-autoscaler-qa

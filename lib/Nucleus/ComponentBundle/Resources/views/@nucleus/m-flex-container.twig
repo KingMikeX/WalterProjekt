@@ -1,0 +1,36 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-flex-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-flex-container",
+                    data.justifyContent | get_modifier("nuc-m-flex-container--justify-content"),
+                    data.alignItems | get_modifier("nuc-m-flex-container--align-items"),
+                    data.alignContent | get_modifier("nuc-m-flex-container--align-content"),
+                    data.isFullHeight | get_modifier("nuc-m-flex-container--full-height"),
+                    data.hasShowOverflow | get_modifier("nuc-m-flex-container--show-overflow"),
+                    data.gutter | get_modifier("nuc-m-flex-container--gutter"),
+                    data.gutterHorizontal | get_modifier("nuc-m-flex-container--gutter-horizontal"),
+                    data.gutterVertical | get_modifier("nuc-m-flex-container--gutter-vertical")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <{{ data.tag }} class="nuc-m-flex-container__container">
+                {{ core.renderComponents(data.embedded) }}
+            </{{ data.tag }}>
+        </div>
+    {% endif %}
+{% endmacro %}

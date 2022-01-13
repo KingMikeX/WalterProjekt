@@ -1,0 +1,52 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-breadcrumb-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-breadcrumb-container"
+                ],
+                "aria-label": data.textAriaLabel
+            }
+        }) %}
+
+        {# Markup #}
+        <nav {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <ol class="nuc-o-breadcrumb-container__wrapper">
+                <li class="nuc-o-breadcrumb-container__home">
+                    {{ aAnchor.render ( data.objectAnchorHome | merge_data ({
+                        component: "nucleus/a-anchor",
+                        htmlAttributes: {
+                            class: "nuc-o-breadcrumb-container__home-anchor"
+                        },
+                        embedded: [
+                            aIcon.render({
+                                component: "nucleus/a-icon",
+                                htmlAttributes: {
+                                    class: "nuc-o-breadcrumb-container__home-icon"
+                                },
+                                id: "nucleus/home",
+                                size: "inherit"
+                            })
+                        ]
+                    })) }}
+                </li>
+
+                {% if data.embedded is not empty %}
+                    {{ core.renderComponents(data.embedded) }}
+                {% endif %}
+            </ol>
+        </nav>
+    {% endif %}
+{% endmacro %}

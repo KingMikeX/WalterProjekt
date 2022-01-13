@@ -1,0 +1,76 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-stage-slider", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-stage-slider"
+                ],
+                "data-delay": data.hasAutoplay ? data.delay : null,
+                "data-has-autoplay": data.hasAutoplay,
+                "data-is-loop": data.isLoop,
+                "data-aria-message-prev": data.textPrevSlide,
+                "data-aria-message-next": data.textNextSlide,
+                "data-aria-message-first": data.textFirstSlide,
+                "data-aria-message-last": data.textLastSlide
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-o-stage-slider__button-prev"
+                },
+                embedded: [
+                    aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-o-stage-slider__button-icon"
+                        },
+                        id: "nucleus/left",
+                        size: "inherit"
+                    })
+                ]
+            }) }}
+            <div class="nuc-o-stage-slider__container">
+                <div class="nuc-o-stage-slider__wrapper">
+                    {% for _sliderItem in data.embedded %}
+                        <div class = "nuc-o-stage-slider__item">
+                            {{ core.renderComponent(_sliderItem) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="nuc-o-stage-slider__pagination"></div>
+            </div>
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-o-stage-slider__button-next"
+                },
+                embedded: [
+                    aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-o-stage-slider__button-icon"
+                        },
+                        id: "nucleus/right",
+                        size: "inherit"
+                    })
+                ]
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

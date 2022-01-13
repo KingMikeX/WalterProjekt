@@ -1,0 +1,26 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-accordion-container", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-accordion-container",
+                    data.isMultiple | get_modifier("nuc-o-accordion-container--multiple")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </div>
+    {% endif %}
+{% endmacro %}

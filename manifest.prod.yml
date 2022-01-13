@@ -1,0 +1,16 @@
+applications: 
+  - name: Symfony5Mike-prod
+    buildpacks: 
+      - https://github.com/cloudfoundry/php-buildpack 
+    memory: 2GB 
+    disk_quota: 4GB 
+    instances: 1 
+    env: 
+      SYMFONY_ENV: prod 
+      APP_ENV: prod 
+      TZ: Europe/Berlin 
+    routes: 
+      - route: https://Symfony5Mike-prod.apps.02.cf.eu01.stackit.schwarz
+    services: 
+        - Symfony5Mike-mysql-prod
+        - Symfony5Mike-autoscaler-prod

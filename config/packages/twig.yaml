@@ -1,0 +1,12 @@
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    globals:
+        app_name: "%app_name%"
+        app_name_long: "%app_name_long%"
+        app_description: "%app_decription%"
+        app_version: "%app_version%"
+        app_default_locale: "%default_locale%"
+    paths:
+        '%kernel.project_dir%/templates': root
+    form_themes: ['bootstrap_4_horizontal_layout.html.twig']

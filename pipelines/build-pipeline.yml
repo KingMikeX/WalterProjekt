@@ -1,0 +1,84 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+  branches:
+    include:
+      - release/*
+      - bugfix/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  phpVersion: 7.4
+
+steps:
+- script: |
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  displayName: 'Use PHP version $(phpVersion)'
+  enabled: true
+
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Insert credentials in auth.json and ..npmrc for build-process'
+  inputs:
+    rootDirectory: '$(Build.Repository.LocalPath)'
+    targetFiles: |
+      **/auth.json.dist => auth.json
+      **/.npmrc.dist => .npmrc
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'warn'
+    keepToken: true
+    tokenPrefix: '#{{'
+    tokenSuffix: '}}#'
+    useLegacyPattern: false
+    enableTelemetry: true
+  enabled: true
+
+- script: |
+    echo "auth.json"
+    echo "=================="
+    cat auth.json
+    echo "=================="
+    echo ".npmrc"
+    echo "=================="
+    cat .npmrc
+    echo "=================="
+  workingDirectory: '$(System.DefaultWorkingDirectory)'
+  displayName: 'Display auth.json and ..npmrc to control variable replacements'
+  enabled: true
+
+- script: composer install --no-interaction --prefer-dist --no-scripts -vv
+  displayName: 'Composer: Install php dependencies'
+  enabled: true
+
+- script: yarn install --verbose
+  displayName: 'Yarn: Install frontend dependencies'
+  enabled: true
+
+- script: yarn encore production
+  displayName: 'Yarn: Process assets for symfony with webpack encore'
+  enabled: true
+
+- script: find . -print
+  displayName: 'List all files in working directory to control output'
+  enabled: true
+
+- script: vendor/phpunit/phpunit/phpunit
+  displayName: 'Run tests with phpunit'
+  enabled: true
+
+- task: PublishPipelineArtifact@1
+  inputs:
+      targetPath: '$(Pipeline.Workspace)'
+      artifact: 'Symfony5Mike-build'
+      publishLocation: 'pipeline'
+  enabled: true

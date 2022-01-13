@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crap_result>
+  <project/>
+  <timestamp>2021-12-01 12:00:49</timestamp>
+  <stats>
+    <name>Method Crap Stats</name>
+    <methodCount>85</methodCount>
+    <crapMethodCount>0</crapMethodCount>
+    <crapLoad>0</crapLoad>
+    <totalCrap>350</totalCrap>
+    <crapMethodPercent>0</crapMethodPercent>
+  </stats>
+  <methods>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(App\Entity\Helper\UserHelper $userHelper, App\Entity\Helper\RegistCodeHelper $registCodeHelper)</methodSignature>
+      <fullMethod>__construct(App\Entity\Helper\UserHelper $userHelper, App\Entity\Helper\RegistCodeHelper $registCodeHelper)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>index</methodName>
+      <methodSignature>index(): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>index(): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>displayUserInformation</methodName>
+      <methodSignature>displayUserInformation(App\Entity\User $user): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>displayUserInformation(App\Entity\User $user): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>removeUser</methodName>
+      <methodSignature>removeUser(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</methodSignature>
+      <fullMethod>removeUser(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>generateRegistCode</methodName>
+      <methodSignature>generateRegistCode(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</methodSignature>
+      <fullMethod>generateRegistCode(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AdminController</className>
+      <methodName>resetRegistCode</methodName>
+      <methodSignature>resetRegistCode(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</methodSignature>
+      <fullMethod>resetRegistCode(App\Entity\User $user): Symfony\Component\HttpFoundation\RedirectResponse</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AuthController</className>
+      <methodName>login</methodName>
+      <methodSignature>login(Symfony\Component\Security\Http\Authentication\AuthenticationUtils $authenticationUtils): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>login(Symfony\Component\Security\Http\Authentication\AuthenticationUtils $authenticationUtils): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\AuthController</className>
+      <methodName>logout</methodName>
+      <methodSignature>logout(): void</methodSignature>
+      <fullMethod>logout(): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\HomeController</className>
+      <methodName>index</methodName>
+      <methodSignature>index(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>index(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(App\Entity\Helper\UserHelper $userHelper, App\Entity\Helper\FlashMessageHelper $flashMessageHelper, App\Entity\Helper\RegistCodeHelper $registCodeHelper, App\Entity\Helper\MessageHelper $messageHelper, App\Entity\Helper\TransferHelper $transferHelper)</methodSignature>
+      <fullMethod>__construct(App\Entity\Helper\UserHelper $userHelper, App\Entity\Helper\FlashMessageHelper $flashMessageHelper, App\Entity\Helper\RegistCodeHelper $registCodeHelper, App\Entity\Helper\MessageHelper $messageHelper, App\Entity\Helper\TransferHelper $transferHelper)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>index</methodName>
+      <methodSignature>index(): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>index(): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>changePassword</methodName>
+      <methodSignature>changePassword(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>changePassword(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>indexApi</methodName>
+      <methodSignature>indexApi(): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>indexApi(): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>apiResult</methodName>
+      <methodSignature>apiResult(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>apiResult(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>setUserLocale</methodName>
+      <methodSignature>setUserLocale(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>setUserLocale(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>checkRegistCode</methodName>
+      <methodSignature>checkRegistCode(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>checkRegistCode(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>displayMyMessages</methodName>
+      <methodSignature>displayMyMessages(): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>displayMyMessages(): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>transfer</methodName>
+      <methodSignature>transfer(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>transfer(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\ProfileController</className>
+      <methodName>sendMessage</methodName>
+      <methodSignature>sendMessage(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>sendMessage(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\RegistrationController</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(App\Security\EmailVerifier $emailVerifier)</methodSignature>
+      <fullMethod>__construct(App\Security\EmailVerifier $emailVerifier)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\RegistrationController</className>
+      <methodName>register</methodName>
+      <methodSignature>register(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>register(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>12</crap>
+      <complexity>3</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Controller</package>
+      <className>App\Controller\RegistrationController</className>
+      <methodName>verifyEmailFromUser</methodName>
+      <methodSignature>verifyEmailFromUser(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</methodSignature>
+      <fullMethod>verifyEmailFromUser(Symfony\Component\HttpFoundation\Request $request): Symfony\Component\HttpFoundation\Response</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\FlashMessageHelper</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct()</methodSignature>
+      <fullMethod>__construct()</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\FlashMessageHelper</className>
+      <methodName>displayFlashMessage</methodName>
+      <methodSignature>displayFlashMessage($passwordChanged): void</methodSignature>
+      <fullMethod>displayFlashMessage($passwordChanged): void</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\MessageHelper</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(App\Repository\UserRepository $userRepository, Doctrine\ORM\EntityManagerInterface $em)</methodSignature>
+      <fullMethod>__construct(App\Repository\UserRepository $userRepository, Doctrine\ORM\EntityManagerInterface $em)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\MessageHelper</className>
+      <methodName>displayMyMessages</methodName>
+      <methodSignature>displayMyMessages()</methodSignature>
+      <fullMethod>displayMyMessages()</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\MessageHelper</className>
+      <methodName>sendMessage</methodName>
+      <methodSignature>sendMessage($form, $request)</methodSignature>
+      <fullMethod>sendMessage($form, $request)</fullMethod>
+      <crap>30</crap>
+      <complexity>5</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\RegistCodeHelper</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(Doctrine\ORM\EntityManagerInterface $em, App\Repository\UserRepository $userRepository)</methodSignature>
+      <fullMethod>__construct(Doctrine\ORM\EntityManagerInterface $em, App\Repository\UserRepository $userRepository)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\RegistCodeHelper</className>
+      <methodName>generateRegistCode</methodName>
+      <methodSignature>generateRegistCode($user): void</methodSignature>
+      <fullMethod>generateRegistCode($user): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\RegistCodeHelper</className>
+      <methodName>resetRegistCode</methodName>
+      <methodSignature>resetRegistCode($user): void</methodSignature>
+      <fullMethod>resetRegistCode($user): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\RegistCodeHelper</className>
+      <methodName>checkRegistCode</methodName>
+      <methodSignature>checkRegistCode($request): void</methodSignature>
+      <fullMethod>checkRegistCode($request): void</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\TransferHelper</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(Doctrine\ORM\EntityManagerInterface $em, App\Repository\UserRepository $userRepository)</methodSignature>
+      <fullMethod>__construct(Doctrine\ORM\EntityManagerInterface $em, App\Repository\UserRepository $userRepository)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\TransferHelper</className>
+      <methodName>transfer</methodName>
+      <methodSignature>transfer($form, $request)</methodSignature>
+      <fullMethod>transfer($form, $request)</fullMethod>
+      <crap>42</crap>
+      <complexity>6</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\UserHelper</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(App\Repository\UserRepository $userRepository, Doctrine\ORM\EntityManagerInterface $em, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder)</methodSignature>
+      <fullMethod>__construct(App\Repository\UserRepository $userRepository, Doctrine\ORM\EntityManagerInterface $em, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder)</fullMethod>
+      <crap>1</crap>
+      <complexity>1</complexity>
+      <coverage>100</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\UserHelper</className>
+      <methodName>findAllUsers</methodName>
+      <methodSignature>findAllUsers(): array</methodSignature>
+      <fullMethod>findAllUsers(): array</fullMethod>
+      <crap>1</crap>
+      <complexity>1</complexity>
+      <coverage>100</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\UserHelper</className>
+      <methodName>removeUser</methodName>
+      <methodSignature>removeUser($user): void</methodSignature>
+      <fullMethod>removeUser($user): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\UserHelper</className>
+      <methodName>changePassword</methodName>
+      <methodSignature>changePassword($form, $request): bool</methodSignature>
+      <fullMethod>changePassword($form, $request): bool</fullMethod>
+      <crap>20</crap>
+      <complexity>4</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity\Helper</package>
+      <className>App\Entity\Helper\UserHelper</className>
+      <methodName>setUserLocale</methodName>
+      <methodSignature>setUserLocale($request)</methodSignature>
+      <fullMethod>setUserLocale($request)</fullMethod>
+      <crap>30</crap>
+      <complexity>5</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getId</methodName>
+      <methodSignature>getId(): ?int</methodSignature>
+      <fullMethod>getId(): ?int</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getEmail</methodName>
+      <methodSignature>getEmail(): ?string</methodSignature>
+      <fullMethod>getEmail(): ?string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setEmail</methodName>
+      <methodSignature>setEmail(string $email): self</methodSignature>
+      <fullMethod>setEmail(string $email): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getUsername</methodName>
+      <methodSignature>getUsername(): string</methodSignature>
+      <fullMethod>getUsername(): string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getRoles</methodName>
+      <methodSignature>getRoles(): array</methodSignature>
+      <fullMethod>getRoles(): array</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setRoles</methodName>
+      <methodSignature>setRoles(array $roles): self</methodSignature>
+      <fullMethod>setRoles(array $roles): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getPassword</methodName>
+      <methodSignature>getPassword(): string</methodSignature>
+      <fullMethod>getPassword(): string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setPassword</methodName>
+      <methodSignature>setPassword(string $password): self</methodSignature>
+      <fullMethod>setPassword(string $password): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getSalt</methodName>
+      <methodSignature>getSalt(): ?string</methodSignature>
+      <fullMethod>getSalt(): ?string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>eraseCredentials</methodName>
+      <methodSignature>eraseCredentials(): void</methodSignature>
+      <fullMethod>eraseCredentials(): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>isVerified</methodName>
+      <methodSignature>isVerified(): bool</methodSignature>
+      <fullMethod>isVerified(): bool</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setIsVerified</methodName>
+      <methodSignature>setIsVerified(bool $isVerified): self</methodSignature>
+      <fullMethod>setIsVerified(bool $isVerified): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getUserLocale</methodName>
+      <methodSignature>getUserLocale(): string</methodSignature>
+      <fullMethod>getUserLocale(): string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setUserLocale</methodName>
+      <methodSignature>setUserLocale(string $locale): self</methodSignature>
+      <fullMethod>setUserLocale(string $locale): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getRegistCode</methodName>
+      <methodSignature>getRegistCode(): string</methodSignature>
+      <fullMethod>getRegistCode(): string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setRegistCode</methodName>
+      <methodSignature>setRegistCode(string $registCode): self</methodSignature>
+      <fullMethod>setRegistCode(string $registCode): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getBalance</methodName>
+      <methodSignature>getBalance(): float</methodSignature>
+      <fullMethod>getBalance(): float</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setBalance</methodName>
+      <methodSignature>setBalance(float $balance): self</methodSignature>
+      <fullMethod>setBalance(float $balance): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>getMessage</methodName>
+      <methodSignature>getMessage(): array</methodSignature>
+      <fullMethod>getMessage(): array</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Entity</package>
+      <className>App\Entity\User</className>
+      <methodName>setMessage</methodName>
+      <methodSignature>setMessage(array $message): self</methodSignature>
+      <fullMethod>setMessage(array $message): self</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\LocaleSubscriber</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(string $defaultLocale)</methodSignature>
+      <fullMethod>__construct(string $defaultLocale)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\LocaleSubscriber</className>
+      <methodName>onKernelRequest</methodName>
+      <methodSignature>onKernelRequest(Symfony\Component\HttpKernel\Event\RequestEvent $event): void</methodSignature>
+      <fullMethod>onKernelRequest(Symfony\Component\HttpKernel\Event\RequestEvent $event): void</fullMethod>
+      <crap>12</crap>
+      <complexity>3</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\LocaleSubscriber</className>
+      <methodName>getSubscribedEvents</methodName>
+      <methodSignature>getSubscribedEvents(): array</methodSignature>
+      <fullMethod>getSubscribedEvents(): array</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\UserLocaleSubscriber</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(Symfony\Component\HttpFoundation\Session\SessionInterface $session)</methodSignature>
+      <fullMethod>__construct(Symfony\Component\HttpFoundation\Session\SessionInterface $session)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\UserLocaleSubscriber</className>
+      <methodName>getSubscribedEvents</methodName>
+      <methodSignature>getSubscribedEvents()</methodSignature>
+      <fullMethod>getSubscribedEvents()</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\EventSubscriber</package>
+      <className>App\EventSubscriber\UserLocaleSubscriber</className>
+      <methodName>onLogin</methodName>
+      <methodSignature>onLogin(Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event)</methodSignature>
+      <fullMethod>onLogin(Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event)</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\MessageType</className>
+      <methodName>buildForm</methodName>
+      <methodSignature>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</methodSignature>
+      <fullMethod>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\MessageType</className>
+      <methodName>configureOptions</methodName>
+      <methodSignature>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</methodSignature>
+      <fullMethod>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\PwChangeType</className>
+      <methodName>buildForm</methodName>
+      <methodSignature>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</methodSignature>
+      <fullMethod>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\PwChangeType</className>
+      <methodName>configureOptions</methodName>
+      <methodSignature>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</methodSignature>
+      <fullMethod>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\RegistrationFormType</className>
+      <methodName>buildForm</methodName>
+      <methodSignature>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options): void</methodSignature>
+      <fullMethod>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\RegistrationFormType</className>
+      <methodName>configureOptions</methodName>
+      <methodSignature>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</methodSignature>
+      <fullMethod>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\TransferType</className>
+      <methodName>buildForm</methodName>
+      <methodSignature>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</methodSignature>
+      <fullMethod>buildForm(Symfony\Component\Form\FormBuilderInterface $builder, array $options)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Form</package>
+      <className>App\Form\TransferType</className>
+      <methodName>configureOptions</methodName>
+      <methodSignature>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</methodSignature>
+      <fullMethod>configureOptions(Symfony\Component\OptionsResolver\OptionsResolver $resolver): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Repository</package>
+      <className>App\Repository\UserRepository</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(Doctrine\Persistence\ManagerRegistry $registry)</methodSignature>
+      <fullMethod>__construct(Doctrine\Persistence\ManagerRegistry $registry)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Repository</package>
+      <className>App\Repository\UserRepository</className>
+      <methodName>upgradePassword</methodName>
+      <methodSignature>upgradePassword(Symfony\Component\Security\Core\User\UserInterface $user, string $newEncodedPassword): void</methodSignature>
+      <fullMethod>upgradePassword(Symfony\Component\Security\Core\User\UserInterface $user, string $newEncodedPassword): void</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\EmailVerifier</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface $helper, Symfony\Component\Mailer\MailerInterface $mailer, Doctrine\ORM\EntityManagerInterface $manager)</methodSignature>
+      <fullMethod>__construct(SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface $helper, Symfony\Component\Mailer\MailerInterface $mailer, Doctrine\ORM\EntityManagerInterface $manager)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\EmailVerifier</className>
+      <methodName>sendConfirmationforEmail</methodName>
+      <methodSignature>sendConfirmationforEmail(string $verifyEmailRouteName, Symfony\Component\Security\Core\User\UserInterface $user, Symfony\Bridge\Twig\Mime\TemplatedEmail $email): void</methodSignature>
+      <fullMethod>sendConfirmationforEmail(string $verifyEmailRouteName, Symfony\Component\Security\Core\User\UserInterface $user, Symfony\Bridge\Twig\Mime\TemplatedEmail $email): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\EmailVerifier</className>
+      <methodName>handleEmailConfirmation</methodName>
+      <methodSignature>handleEmailConfirmation(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\User\UserInterface $user): void</methodSignature>
+      <fullMethod>handleEmailConfirmation(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\User\UserInterface $user): void</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>__construct</methodName>
+      <methodSignature>__construct(Doctrine\ORM\EntityManagerInterface $entityManager, Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator, Symfony\Component\Security\Csrf\CsrfTokenManagerInterface $csrfTokenManager, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder)</methodSignature>
+      <fullMethod>__construct(Doctrine\ORM\EntityManagerInterface $entityManager, Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator, Symfony\Component\Security\Csrf\CsrfTokenManagerInterface $csrfTokenManager, Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder)</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>supports</methodName>
+      <methodSignature>supports(Symfony\Component\HttpFoundation\Request $request): bool</methodSignature>
+      <fullMethod>supports(Symfony\Component\HttpFoundation\Request $request): bool</fullMethod>
+      <crap>6</crap>
+      <complexity>2</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>getCredentials</methodName>
+      <methodSignature>getCredentials(Symfony\Component\HttpFoundation\Request $request): array</methodSignature>
+      <fullMethod>getCredentials(Symfony\Component\HttpFoundation\Request $request): array</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>getUser</methodName>
+      <methodSignature>getUser($credentials, Symfony\Component\Security\Core\User\UserProviderInterface $userProvider)</methodSignature>
+      <fullMethod>getUser($credentials, Symfony\Component\Security\Core\User\UserProviderInterface $userProvider)</fullMethod>
+      <crap>12</crap>
+      <complexity>3</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>checkCredentials</methodName>
+      <methodSignature>checkCredentials($credentials, Symfony\Component\Security\Core\User\UserInterface $user): bool</methodSignature>
+      <fullMethod>checkCredentials($credentials, Symfony\Component\Security\Core\User\UserInterface $user): bool</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>getPassword</methodName>
+      <methodSignature>getPassword($credentials): ?string</methodSignature>
+      <fullMethod>getPassword($credentials): ?string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>onAuthenticationSuccess</methodName>
+      <methodSignature>onAuthenticationSuccess(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token, string $providerKey): Symfony\Component\HttpFoundation\RedirectResponse</methodSignature>
+      <fullMethod>onAuthenticationSuccess(Symfony\Component\HttpFoundation\Request $request, Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token, string $providerKey): Symfony\Component\HttpFoundation\RedirectResponse</fullMethod>
+      <crap>12</crap>
+      <complexity>3</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+    <method>
+      <package>App\Security</package>
+      <className>App\Security\LoginFormAuthenticator</className>
+      <methodName>getLoginUrl</methodName>
+      <methodSignature>getLoginUrl(): string</methodSignature>
+      <fullMethod>getLoginUrl(): string</fullMethod>
+      <crap>2</crap>
+      <complexity>1</complexity>
+      <coverage>0</coverage>
+      <crapLoad>0</crapLoad>
+    </method>
+  </methods>
+</crap_result>

@@ -1,0 +1,85 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-accordion-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-accordion-item",
+                    data.isOpen | get_modifier("nuc-m-accordion-item--open"),
+                    data.isDisabled | get_modifier("nuc-m-accordion-item--disabled")
+                ]
+            }
+        }) %}
+
+        {% set _itemID = "nuc-m-accordion-item-" ~ random() %}
+        {% set _contentID = "nuc-m-accordion-item__content-" ~ random() %}
+
+        {% set contentAttributes = {
+            htmlAttributes: {
+                "role" : "region",
+                "id": _contentID,
+                "aria-labelledby": _itemID
+            }
+        } %}
+
+        {% set _embeddedTrigger %}
+            {% if data.icon is not empty %}
+                {{ aIcon.render({
+                    component: "nucleus/a-icon",
+                    htmlAttributes: {
+                        class: "nuc-m-accordion-item__icon"
+                    },
+                    id: data.icon,
+                    size: "inherit",
+                    textTitle: data.textIconTitle
+                }) }}
+            {% endif %}
+
+            <{{data.tag}} class="nuc-m-accordion-item__heading">{{ data.textHeadline }}</{{data.tag}}>
+
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    class: "nuc-m-accordion-item__state-icon"
+                },
+                size: "inherit",
+                id: "nucleus/down"
+            }) }}
+        {% endset %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-m-accordion-item__trigger",
+                    id: _itemID,
+                    "aria-controls": _contentID
+                },
+                isDisabled: data.isDisabled,
+                embedded: [
+                    _embeddedTrigger
+                ]
+            }) }}
+            <div class="nuc-m-accordion-item__content" {{ render_attributes(contentAttributes.htmlAttributes) }}>
+                {% if data.embedded is not empty %}
+                    {{ core.renderComponents(data.embedded) }}
+                {% elseif data.content is not empty %}
+                    {{ core.renderContent(data.content, data.isRawContent) }}
+                {% else %}
+                    {{ throw_exception("Either embedded or content must be privided in nucleus/m-accordion-item") }}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

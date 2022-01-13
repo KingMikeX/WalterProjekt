@@ -1,0 +1,37 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-svg-use.twig" as aSvgUse %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz-group/a-keyvisual-animation", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scgr-a-keyvisual-animation",
+                    data.size | get_modifier("scgr-a-keyvisual-animation--size", {property: "size", omitDefaultModifier: true}),
+                    data.position | get_modifier("scgr-a-keyvisual-animation--position", {property: "position", omitDefaultModifier: true}),
+                    data.theme | get_modifier("scgr-a-keyvisual-animation--theme", {property: "theme", omitDefaultModifier: true})
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aSvgUse.render({
+                component: "nucleus/a-svg-use",
+                htmlAttributes: {
+                    class: "scgr-a-keyvisual-animation__svg"
+                },
+                urlSource: asset("assets/@schwarz-group/a-keyvisual-animation/schwarz-key-visual.svg", get_asset_namespace()) ~ "#svg",
+                viewBox: "0 0 623 816"
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

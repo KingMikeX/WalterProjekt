@@ -1,0 +1,364 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+  - none
+
+pool: # remove the pool which is not needed by your project
+
+  # Stack IT AppCloud External (apps.01.cf.eu01.stackit.cloud)
+  vmImage: 'ubuntu-latest'
+
+  # Stack IT AppCloud Internal (apps.02.cf.eu01.stackit.schwarz)
+  name: 'Kaufland OC Linux'
+
+variables:
+  environmentVariable: test
+  vmImageName: 'ubuntu-latest'
+
+#########################
+# Check Services Stage
+#########################
+stages:
+  - stage: 'cloudfoundry_service_check'
+    jobs:
+      - job: 'check_services'
+        steps:
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-install-task.CloudFoundryCLIInstall@0
+            displayName: 'Install Cloud Foundry CLI 6.43.0'
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check Cloud Foundry Service SpaceDeployer Test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: service
+              cfArguments: 'Symfony5Mike-space-deployer-test --guid'
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check Cloud Foundry Service MySQL Test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: service
+              cfArguments: 'Symfony5Mike-mysql-test --guid'
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check Cloud Foundry Service Redis Test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: service
+              cfArguments: 'Symfony5Mike-redis-test --guid'
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check Cloud Foundry Service Logging Test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: service
+              cfArguments: 'Symfony5Mike-logging-test --guid'
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check Cloud Foundry Service Autoscaler Test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: service
+              cfArguments: 'Symfony5Mike-autoscaler-test --guid'
+
+          - script: |
+              echo "All services of test-stage verified"
+            displayName: 'Services of test-stage verified'
+
+
+  #########################
+  # test release stage
+  #########################
+  - stage: 'release_symfony5mike_test'
+    dependsOn: 'cloudfoundry_service_check'
+    condition: succeeded('cloudfoundry_service_check')
+    jobs:
+      - job: 'prepare_test_stage'
+        steps:
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-install-task.CloudFoundryCLIInstall@0
+            displayName: 'Install Cloud Foundry CLI 6.43.0'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Check existence of Symfony5Mike-test [blue] app'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: app
+              cfArguments: 'Symfony5Mike-test --guid'
+            continueOnError: true
+            enabled: true
+
+      - job: 'deploy_blue_test_app'
+        dependsOn: 'prepare_test_stage'
+        condition: eq(dependencies.prepare_test_stage.result,'SucceededWithIssues')
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: '#{{ado_build_project_hash}}#'
+              definition: '#{{ado_build_pipeline_id}}#'
+              buildVersionToDownload: 'latest'
+              artifactName: 'Symfony5Mike-build'
+              targetPath: '$(Pipeline.Workspace)'
+            enabled: true
+
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: 'Replace tokens in dist-config-files'
+            inputs:
+              rootDirectory: '$(System.DefaultWorkingDirectory)'
+              targetFiles: |
+                **/.env.dist => .env
+                **/.env.test => .env.test
+                **/auth.json.dist => auth.json
+                **/.npmrc.dist => .npmrc
+                **/nginx.conf.dist => nginx.conf
+                **/server-defaults.conf.dist => server-defaults.conf
+                **/server-locations.conf.dist => server-locations.conf
+              keepToken: true
+              tokenPrefix: '#{{'
+              tokenSuffix: '}}#'
+              variableFiles: '$(System.DefaultWorkingDirectory)/pipelines/pipeline-variables-test.yml'
+            enabled: true
+
+          - script: |
+              echo "=================================================================================="
+              echo "manifest.test.yml"
+              echo "=================================================================================="
+              cat manifest.test.yml
+              echo
+              echo
+              echo "=================================================================================="
+              echo "auth.json"
+              echo "=================================================================================="
+              cat auth.json
+              echo
+              echo
+              echo "=================================================================================="
+              echo ".env.test"
+              echo "=================================================================================="
+              cat .env.test
+              echo
+              echo
+              echo "=================================================================================="
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            displayName: 'Display manifest.yml to control variable replacements'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-install-task.CloudFoundryCLIInstall@0
+            displayName: 'Install Cloud Foundry CLI 6.43.0'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-task.CloudFoundry@1
+            displayName: 'Push app Symfony5Mike-test [blue] if not existing'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfManifest: '$(System.DefaultWorkingDirectory)/manifest.test.yml'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+            enabled: true
+
+      - job: 'deploy_green_test_app'
+        dependsOn: 'prepare_test_stage'
+        condition: or(eq(dependencies.prepare_test_stage.result,'Succeeded'), and(eq(dependencies.prepare_test_stage.result,'SucceededWithIssues'), eq(dependencies.deploy_blue_test_app.result,'Succeeded')))
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: '#{{ado_build_project_hash}}#'
+              definition: '#{{ado_build_pipeline_id}}#'
+              buildVersionToDownload: 'latest'
+              artifactName: 'Symfony5Mike-build'
+              targetPath: '$(Pipeline.Workspace)'
+            enabled: true
+
+          - script: |
+              find . -print
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            displayName: 'List all files in working directory to control output'
+            enabled: true
+
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: 'Replace tokens in dist-config-files'
+            inputs:
+              rootDirectory: '$(System.DefaultWorkingDirectory)'
+              targetFiles: |
+                **/.env.dist => .env
+                **/.env.test => .env.test
+                **/auth.json.dist => auth.json
+                **/.npmrc.dist => .npmrc
+                **/nginx.conf.dist => nginx.conf
+                **/server-defaults.conf.dist => server-defaults.conf
+                **/server-locations.conf.dist => server-locations.conf
+              keepToken: true
+              tokenPrefix: '#{{'
+              tokenSuffix: '}}#'
+              variableFiles: '$(System.DefaultWorkingDirectory)/pipelines/pipeline-variables-test.yml'
+            enabled: true
+
+          - script: |
+              echo "=================================================================================="
+              echo "manifest.test.yml"
+              echo "=================================================================================="
+              cat manifest.test.yml
+              echo
+              echo
+              echo "=================================================================================="
+              echo "auth.json"
+              echo "=================================================================================="
+              cat auth.json
+              echo
+              echo
+              echo "=================================================================================="
+              echo ".env.test"
+              echo "=================================================================================="
+              cat .env.test
+              echo
+              echo
+              echo "=================================================================================="
+              echo "nginx.conf"
+              echo "=================================================================================="
+              cat .bp-config/nginx/nginx.conf
+              echo
+              echo
+              echo "=================================================================================="
+              echo "server-locations.conf"
+              echo "=================================================================================="
+              cat .bp-config/nginx/server-locations.conf
+              echo
+              echo
+              echo "=================================================================================="
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            displayName: 'Display manifest.yml to control variable replacements'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-install-task.CloudFoundryCLIInstall@0
+            displayName: 'Install Cloud Foundry CLI 6.43.0'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-task.CloudFoundry@1
+            displayName: 'Push app Symfony5Mike-temp-test [green]'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfManifest: '$(System.DefaultWorkingDirectory)/manifest.temp.test.yml'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Add route [blue] to Symfony5Mike-temp-test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: 'map-route'
+              cfArguments: 'Symfony5Mike-temp-test apps.02.cf.eu01.stackit.schwarz -n Symfony5Mike-test'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Remove route [blue] from Symfony5Mike-test'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: 'unmap-route'
+              cfArguments: 'Symfony5Mike-test apps.02.cf.eu01.stackit.schwarz -n Symfony5Mike-test'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Delete Symfony5Mike-test [blue] after route switch'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: delete
+              cfArguments: 'Symfony5Mike-test -f'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Rename Symfony5Mike-temp-test [green] to Symfony5Mike-test [blue]'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: rename
+              cfArguments: 'Symfony5Mike-temp-test Symfony5Mike-test'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Improve composer autoload performance'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: ssh
+              cfArguments: 'Symfony5Mike-test -c "cd /home/vcap/app && . init_cli.sh && php php/bin/composer.phar dump-autoload --optimize"'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Install assets of third party bundles'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: ssh
+              cfArguments: 'Symfony5Mike-test -c "cd /home/vcap/app && . init_cli.sh && php bin/console assets:install --symlink --relative"'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Execute database migrations'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: ssh
+              cfArguments: 'Symfony5Mike-test -c "cd /home/vcap/app && . init_cli.sh && php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration"'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Clear redis caches'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: ssh
+              cfArguments: 'Symfony5Mike-test -c "cd /home/vcap/app && . init_cli.sh && php bin/console project:maintenance:redis --doctrine-client --cache-client --maintenance-command=flushdb"'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'Clear symfony cache'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: ssh
+              cfArguments: 'Symfony5Mike-test -c "cd /home/vcap/app && . init_cli.sh && php bin/console cache:clear --env=test --no-warmup"'
+            enabled: true
+
+          - task: ms-vsts.cloud-foundry-build-extension.cloud-foundry-cli-task.CloudFoundryCLI@0
+            displayName: 'On Failure: Show detailed logs'
+            inputs:
+              cfEndpoint: 'CloudFoundry Connection Test'
+              org: Symfony5Mike
+              space: test
+              cfCommand: logs
+              cfArguments: 'Symfony5Mike-test --recent'
+              workingDirectory: '$(System.DefaultWorkingDirectory)'
+            condition: failed()
+            enabled: true

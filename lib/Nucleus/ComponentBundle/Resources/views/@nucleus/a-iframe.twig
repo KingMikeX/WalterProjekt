@@ -1,0 +1,30 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-iframe", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-iframe",
+                    data.autoresize | get_modifier("nuc-a-iframe--autoresize", {
+                        property: "autoresize",
+                        omitDefaultModifier: true
+                    })
+                ],
+                src: data.urlSource,
+                title: data.textTitle
+            }
+        }) %}
+
+        {# Markup #}
+        <iframe {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}></iframe>
+    {% endif %}
+{% endmacro %}

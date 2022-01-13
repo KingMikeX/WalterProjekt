@@ -1,0 +1,85 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@schwarz/m-header-sub-nav-item.twig" as mHeaderSubNavItem %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-header-main-nav-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-m-header-main-nav-item",
+                    "scwz-m-header-nav-item",
+                    data.isActive | get_modifier("scwz-m-header-main-nav-item--active")
+                ]
+            }
+        }) %}
+
+        {% set dataSubNavigation = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-o-header__nav-dropdown-container",
+                    "scwz-m-header-main-nav-item__dropdown-container"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        {% if data.embeddedSubNavigation is not empty %}
+            <li {{ render_attributes(dataSubNavigation.htmlAttributes) }}>
+                {{ aAnchor.render(data.objectAnchor | merge_data({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        classList: [
+                            "scwz-m-header-main-nav-item__anchor",
+                            "scwz-m-header-nav-item__anchor",
+                            "scwz-o-header__nav-dropdown-trigger"
+                        ],
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                    },
+                    embedded: [
+                        data.text
+                    ]
+                })) }}
+                <ul class="scwz-o-header__nav-dropdown-list">
+                    {% for _item in data.embeddedSubNavigation %}
+                        {{ mHeaderSubNavItem.render(_item | merge_data({
+                            component: "schwarz/m-header-sub-nav-item",
+                            htmlAttributes: {
+                                class: "scwz-m-header-nav-sub-item"
+                            }
+                        })) }}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% else %}
+            <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+                {{ aAnchor.render(data.objectAnchor | merge_data({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        classList: [
+                            "scwz-m-header-main-nav-item__anchor",
+                            "scwz-m-header-nav-item__anchor"
+                        ],
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                    },
+                    embedded: [
+                        data.text
+                    ]
+                })) }}
+                {% if data.isActive is same as(true) %}
+                    <ul class="scwz-m-header-nav-item-list"></ul>
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

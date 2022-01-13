@@ -1,0 +1,36 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz-group/m-data-facts", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scgr-m-data-facts"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <article {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <h3 class="scgr-m-data-facts__number">
+                {{ data.textNumber }}
+            </h3>
+            <div class="scgr-m-data-facts__description-wrapper">
+                <h4 class="scgr-m-data-facts__numberType">
+                    {{ data.textNumberType }}
+                </h4>
+                <p class="scgr-m-data-facts__description">
+                    {{ data.textDescription }}
+                </p>
+            </div>
+        </article>
+    {% endif %}
+{% endmacro %}

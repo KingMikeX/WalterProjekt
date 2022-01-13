@@ -1,0 +1,31 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/u-config", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {}
+        }) %}
+
+        {# Markup #}
+        <script {{ render_attributes(data.htmlAttributes) }}>
+            window.nucleusConfig = window.nucleusConfig || {};
+            {% if data.assetManifestPath is not empty %}
+                window.nucleusConfig.assetManifestPath = "{{ data.assetManifestPath }}";
+            {% endif %}
+            {% if data.nucleusManifestPath is not empty %}
+                window.nucleusConfig.nucleusManifestPath = "{{ data.nucleusManifestPath }}";
+            {% endif %}
+            {% if data.translationsJsonPath is not empty %}
+                window.nucleusConfig.translationsJsonPath = "{{ data.translationsJsonPath }}";
+            {% endif %}
+        </script>
+    {% endif %}
+{% endmacro %}

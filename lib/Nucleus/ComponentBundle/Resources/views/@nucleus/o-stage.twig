@@ -1,0 +1,71 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-stage", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-stage",
+                    data.widthXs | get_modifier("nuc-o-stage--width-xs"),
+                    data.widthSm | get_modifier("nuc-o-stage--width-sm"),
+                    data.widthMd | get_modifier("nuc-o-stage--width-md"),
+                    data.widthLg | get_modifier("nuc-o-stage--width-lg"),
+                    data.offset | get_modifier("nuc-o-stage--offset"),
+                    data.align | get_modifier("nuc-o-stage--align"),
+                    data.keepRatioTo | get_modifier("nuc-o-stage--keep-ratio")
+                ],
+                "data-is-parallax": data.isParallax
+            }
+        }) %}
+
+        {# Markup #}
+        <article {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-o-stage__overflow-container">
+                <div class="nuc-o-stage__media-align-container">
+                    <div class="nuc-o-stage__media-size-container">
+                        {% if data.objectMediaLg is not empty %}
+                            {{ core.renderComponent(data.objectMediaLg | merge_data({
+                                htmlAttributes: {
+                                    class: "nuc-o-stage__media nuc-o-stage__media--viewport-lg"
+                                }
+                            })) }}
+                        {% endif %}
+                        {% if data.objectMediaMd is not empty %}
+                            {{ core.renderComponent(data.objectMediaMd | merge_data({
+                                htmlAttributes: {
+                                    class: "nuc-o-stage__media nuc-o-stage__media--viewport-md"
+                                }
+                            })) }}
+                        {% endif %}
+                        {% if data.objectMediaSm is not empty %}
+                            {{ core.renderComponent(data.objectMediaSm | merge_data({
+                                htmlAttributes: {
+                                    class: "nuc-o-stage__media nuc-o-stage__media--viewport-sm"
+                                }
+                            })) }}
+                        {% endif %}
+                        {{ core.renderComponent(data.objectMedia | merge_data({
+                            htmlAttributes: {
+                                class: "nuc-o-stage__media nuc-o-stage__media--viewport-xs"
+                            }
+                        })) }}
+                    </div>
+                </div>
+                {% if data.embeddedOverlay is not empty %}
+                    <div class="nuc-o-stage__overlay-container">
+                        {{ core.renderComponents(data.embeddedOverlay) }}
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+    {% endif %}
+{% endmacro %}

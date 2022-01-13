@@ -1,0 +1,47 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-media-native", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-media-native",
+                    data.ratio | get_modifier("nuc-a-media-native--ratio")
+                ]
+            }
+        }) %}
+
+        {% if data.ratio == "custom" %}
+            {% set _padding = 100 / data.ratioCustom %}
+            {% set data = data | merge_data({
+                htmlAttributes: {
+                    style: "padding-top: " ~ _padding ~ "%;"
+                }
+            }) %}
+        {% endif %}
+
+        {% set videoHtmlAttributes = {
+            class: "nuc-a-media-native__video",
+            "controls": not data.hasNoControls,
+            "autoplay": data.hasAutoplay,
+            "loop": data.isLoop,
+            "muted": data.isMuted
+        } %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <video {{ render_attributes(videoHtmlAttributes) }}>
+                <source class="nuc-a-media-native__source" type="{{ data.type }}" data-src="{{ data.urlSource }}"></source>
+                {{ data.textNotSupported }}
+            </video>
+        </div>
+    {% endif %}
+{% endmacro %}

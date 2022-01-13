@@ -1,0 +1,38 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-media") %}
+
+    {# Logic #}
+    {% set data = data | merge_data({
+        htmlAttributes: {
+            classList: [
+                "nuc-o-media",
+                data.position | get_modifier("nuc-o-media--position"),
+                data.width | get_modifier("nuc-o-media--width")
+            ]
+        }
+    }) %}
+
+    {# Markup #}
+    <article {{ data.htmlAttributes | render_attributes }}>
+        {% if data.objectPicture is not empty %}
+            <div class="nuc-o-media__picture-container">
+                {{ mPicture.render(data.objectPicture | merge_data({
+                    component: "nucleus/m-picture",
+                    htmlAttributes: {
+                        class: "nuc-o-media__picture"
+                    }
+                })) }}
+            </div>
+        {% endif %}
+        <div class="nuc-o-media__embedded">
+            {% if data.embedded is not empty %}
+                {{ core.renderComponents(data.embedded) }}
+            {% endif %}
+        </div>
+    </article>
+{% endmacro %}

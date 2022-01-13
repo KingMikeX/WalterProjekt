@@ -1,0 +1,47 @@
+# SNC Redis Bundle Configuration
+# Further infos: https://github.com/snc/SncRedisBundle/blob/master/Resources/doc/index.md
+
+parameters:
+    vcap_redis_host: '%env(string:key:host:key:credentials:key:0:key:a9s-redis50:json:VCAP_SERVICES)%'
+    vcap_redis_password: '%env(string:key:password:key:credentials:key:0:key:a9s-redis50:json:VCAP_SERVICES)%'
+    vcap_redis_port: '%env(string:key:port:key:credentials:key:0:key:a9s-redis50:json:VCAP_SERVICES)%'
+    env(REDIS_DSN): 'redis://%vcap_redis_password%@%vcap_redis_host%:%vcap_redis_port%'
+
+    redis_default_dbindex: 0
+    redis_session_dbindex: 1
+    redis_cache_dbindex: 2
+    redis_doctrine_dbindex: 3
+    redis_translation_dbindex: 8
+
+snc_redis:
+    clients:
+        default:
+            alias: default
+            dsn: '%env(resolve:REDIS_DSN)%/%redis_default_dbindex%'
+            type: predis
+            logging: '%kernel.debug%'
+        session:
+            alias: session
+            dsn: '%env(resolve:REDIS_DSN)%/%redis_session_dbindex%'
+            type: predis
+            logging: '%kernel.debug%'
+        cache:
+            alias: cache
+            dsn: '%env(resolve:REDIS_DSN)%/%redis_cache_dbindex%'
+            type: predis
+            logging: '%kernel.debug%'
+        doctrine:
+            alias: doctrine
+            dsn: '%env(resolve:REDIS_DSN)%/%redis_doctrine_dbindex%'
+            type: predis
+            logging: '%kernel.debug%'
+        translation:
+            alias: translation
+            dsn: '%env(resolve:REDIS_DSN)%/%redis_translation_dbindex%'
+            type: predis
+            logging: '%kernel.debug%'
+
+    session:
+        client: session
+        prefix: '%app_name%_session_'
+        ttl: 1200

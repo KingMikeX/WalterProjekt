@@ -1,0 +1,181 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    {% import "@nucleus/m-logo.twig" as mLogo %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-header", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-o-header"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <header {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }} style="visibility: hidden; overflow: hidden;">
+            {% if data.embeddedSubNavigation is defined and data.embeddedSubNavigation is not empty %}
+                <div class="scwz-o-header__background scwz-o-header__background--extended">
+            {% else %}
+                <div class="scwz-o-header__background">
+            {% endif %}
+                <div class="scwz-o-header__content">
+
+                    <div class="scwz-o-header__logo">
+                        {% if data.objectLogo.objectAnchor is defined and data.objectLogo.objectAnchor is not empty %}
+                            {{ mLogo.render(data.objectLogo | merge_data({
+                                component: "nucleus/m-logo",
+                                htmlAttributes: {
+                                    class: "scwz-o-header__logo-anchor"
+                                },
+                                objectAnchor: {
+                                    component: "nucleus/a-anchor"
+                                }
+                            })) }}
+                        {% else %}
+                            {{ mLogo.render(data.objectLogo) }}
+                        {% endif %}
+                    </div>
+
+
+                    <div class="scwz-o-header__navigation">
+                        <div class="scwz-o-header__secondary-navigation">
+                            {% if data.embeddedBrandNavigation is not empty or data.embeddedLanguageNavigation is not empty  %}
+                                <div class="scwz-o-header__navigation-wrapper">
+                                    {% if data.embeddedBrandNavigation is not empty %}
+                                        <nav class="scwz-o-header__brand-navigation" aria-label="{{ data.textAriaLabelBrandNavigation }}">
+                                            <ul class="scwz-o-header__brand-navigation-list">
+                                                {{ core.renderComponents(data.embeddedBrandNavigation) }}
+                                            </ul>
+                                        </nav>
+                                    {% endif %}
+                                    {% if data.embeddedLanguageNavigation is not empty %}
+                                        <nav class="scwz-o-header__language-navigation" aria-label="{{ data.textAriaLabelLanguageNavigation }}">
+                                            <ul class="scwz-o-header__language-navigation-list">
+                                                <li class="scwz-o-header__language-navigation-current scwz-o-header__nav-dropdown-container">
+                                                    {{ aAnchor.render({
+                                                        component: "nucleus/a-anchor",
+                                                        htmlAttributes: {
+                                                            classList: [
+                                                                "scwz-o-header__language-navigation-current-anchor",
+                                                                "scwz-o-header__nav-dropdown-trigger"
+                                                            ],
+                                                            "aria-haspopup": "true",
+                                                            "aria-expanded": "false"
+                                                        },
+                                                        urlReference: "#",
+                                                        embedded: [
+                                                            data.textLanguage
+                                                        ]
+                                                    }) }}
+                                                    <ul class="scwz-o-header__nav-dropdown-list">
+                                                        {{ core.renderComponents(data.embeddedLanguageNavigation) }}
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {% if data.embeddedUserNavigation is not empty %}
+                                <nav class="scwz-o-header__user-navigation" aria-label="{{ data.textAriaLabelUserNavigation }}">
+                                    <ul class="scwz-o-header__user-navigation-list">
+                                        {{ core.renderComponents(data.embeddedUserNavigation) }}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                            {% if data.embeddedMainNavigation is not empty %}
+                                <button class="scwz-o-header__hamburger-navigation" data-controller="header/burgermenu" aria-pressed="false" aria-label="{{ data.textAriaLabelHamburgerNavigation }}">
+                                    <span class="scwz-o-header__hamburger-navigation-icon">
+                                        {{ aIcon.render({
+                                            component: "nucleus/a-icon",
+                                            htmlAttributes: {
+                                                class: "scwz-o-header__hamburger-navigation-icon-open"
+                                            },
+                                            id: "schwarz/bars-horizontal",
+                                            size: "24"
+                                        }) }}
+                                        {{ aIcon.render({
+                                            component: "nucleus/a-icon",
+                                            htmlAttributes: {
+                                                class: "scwz-o-header__hamburger-navigation-icon-close"
+                                            },
+                                            id: "schwarz/cross",
+                                            size: "24"
+                                        }) }}
+                                    </span>
+                                    <span class="scwz-o-header__hamburger-navigation-text">
+                                        {{ data.textHamburgerNavigationIcon[:5] }}
+                                    </span>
+                                </button>
+                            {% endif %}
+
+                        </div>
+                        <div class="scwz-o-header__primary-navigation" role="menu" aria-expanded="false" aria-label="{{ data.textAriaLabelPrimaryNavigation }}">
+                            <nav class="scwz-o-header__main-navigation">
+
+                                <ul class="scwz-o-header__nav-list">
+                                    {{ core.renderComponents(data.embeddedMainNavigation) }}
+                                </ul>
+
+                                <ul class="scwz-o-header__more">
+                                    <li class="scwz-o-header__nav-dropdown-container scwz-o-header__nav-dropdown-container-more scwz-m-header-main-nav-item">
+                                        <a href="#" class="scwz-o-header__nav-dropdown-trigger scwz-m-header-main-nav-item__anchor" aria-haspopup="true" aria-expanded="false">{{ data.textMoreButton }}</a>
+                                        <ul class="scwz-o-header__nav-dropdown-list"></ul>
+                                    </li>
+                                </ul>
+
+                                {% if data.embeddedBrandNavigation is not empty or data.embeddedLanguageNavigation is not empty  %}
+                                    <div class="scwz-o-header__navigation-wrapper">
+
+                                        {% if data.embeddedBrandNavigation is not empty %}
+                                            <nav class="scwz-o-header__brand-navigation" aria-label="{{ data.textAriaLabelBrandNavigation }}">
+                                                <ul class="scwz-o-header__brand-navigation-list">
+                                                    {{ core.renderComponents(data.embeddedBrandNavigation) }}
+                                                </ul>
+                                            </nav>
+                                        {% endif %}
+
+                                        {% if data.embeddedLanguageNavigation is not empty %}
+                                            <nav class="scwz-o-header__language-navigation" aria-label="{{ data.textAriaLabelLanguageNavigation }}">
+                                                <ul class="scwz-o-header__language-navigation-list">
+                                                    {{ core.renderComponents(data.embeddedLanguageNavigation) }}
+                                                </ul>
+                                            </nav>
+                                        {% endif %}
+
+                                    </div>
+                                {% endif %}
+
+                            </nav>
+
+                            {% if data.embeddedSubNavigation is defined and data.embeddedSubNavigation is not empty %}
+                                <nav class="scwz-o-header__sub-navigation">
+                                    <ul class="scwz-o-header__nav-list">
+                                        {{ core.renderComponents(data.embeddedSubNavigation) }}
+                                    </ul>
+                                    <ul class="scwz-o-header__more">
+                                        <li class="scwz-o-header__nav-dropdown-container scwz-o-header__nav-dropdown-container-more scwz-m-header-sub-nav-item">
+                                            <a href="#" class="scwz-o-header__nav-dropdown-trigger scwz-m-header-sub-nav-item__anchor" aria-haspopup="true" aria-expanded="false">{{ data.textMoreButton }}</a>
+                                            <ul class="scwz-o-header__nav-dropdown-list"></ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,79 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-slider", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-slider",
+                    data.isNotFullwidth | get_modifier("nuc-m-slider--no-fullwidth")
+                ],
+                "data-delay": data.hasAutoplay ? data.delay : null,
+                "data-has-autoplay": data.hasAutoplay,
+                "data-is-loop": data.isLoop,
+                "data-slides-per-view": data.slidesPerView | json_encode,
+                "data-slides-per-group": data.slidesPerGroup | json_encode,
+                "data-aria-message-prev": data.textPrevSlide,
+                "data-aria-message-next": data.textNextSlide,
+                "data-aria-message-first": data.textFirstSlide,
+                "data-aria-message-last": data.textLastSlide
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-m-slider__button-prev"
+                },
+                embedded: [
+                    aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-m-slider__button-icon"
+                        },
+                        size: "inherit",
+                        id: "nucleus/left"
+                    })
+                ]
+            }) }}
+            <div class="nuc-m-slider__container">
+                <div class="nuc-m-slider__wrapper">
+                    {% for _sliderItem in data.embedded %}
+                        <div class = "nuc-m-slider__item nuc-m-slider__item--visible">
+                            {{ core.renderComponent(_sliderItem) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="nuc-m-slider__pagination"></div>
+            </div>
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-m-slider__button-next"
+                },
+                embedded: [
+                    aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-m-slider__button-icon"
+                        },
+                        size: "inherit",
+                        id: "nucleus/right"
+                    })
+                ]
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

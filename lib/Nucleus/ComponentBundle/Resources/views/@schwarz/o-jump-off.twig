@@ -1,0 +1,55 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-image.twig" as aImage %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-jump-off", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-o-jump-off"
+                ]
+            }
+        }) %}
+
+        {% set embeddedContent %}
+            {{ aImage.render( data.objectImage | merge_data ({
+                component: "nucleus/a-image",
+                htmlAttributes: {
+                    class: "scwz-o-jump-off__image"
+                }
+            })) }}
+            <div class="scwz-o-jump-off__content">
+                <h3 class="scwz-o-jump-off__headline">{{ data.textHeadline }}</h3>
+                <div class="scwz-o-jump-off__icon-wrapper">
+                    {{ aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "scwz-o-jump-off__icon"
+                        },
+                        id: "schwarz/arrow-right",
+                        size: "inherit"
+                    }) }}
+                </div>
+            </div>
+        {% endset %}
+
+        {# Markup #}
+        {{ aAnchor.render( data.objectAnchor | merge_data ({
+            component: "nucleus/a-anchor",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions,
+            embedded: [ embeddedContent ]
+        })) }}
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,77 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-media-youtube", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _containerId = "nuc-a-media-youtube-" ~ random() %}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-media-youtube",
+                    data.ratio | get_modifier("nuc-a-media-youtube--ratio")
+                ]
+            }
+        }) %}
+
+        {% if data.ratio == "custom" %}
+            {% set _padding = 100 / data.ratioCustom %}
+            {% set data = data | merge_data({
+                htmlAttributes: {
+                    style: "padding-top: " ~ _padding ~ "%;"
+                }
+            }) %}
+        {% endif %}
+
+        {% set _playerVars = {
+            rel: 0
+        } %}
+
+        {% if data.hasAutoplay == true %}
+            {% set _playerVars = _playerVars | merge({
+                autoplay: 1,
+                mute: 1
+            }) %}
+        {% endif %}
+
+        {% if data.isMuted == true %}
+            {% set _playerVars = _playerVars | merge({
+                mute: 1
+            }) %}
+        {% endif %}
+
+        {% if data.hasNoControls == true %}
+            {% set _playerVars = _playerVars | merge({
+                controls: 0
+            }) %}
+        {% endif %}
+
+        {% if data.isLoop == true %}
+            {% set _playerVars = _playerVars | merge({
+                loop: 1,
+                playlist: data.videoId
+            }) %}
+        {% endif %}
+
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                "data-config": {
+                    videoId: data.videoId,
+                    host: "https://www.youtube-nocookie.com",
+                    playerVars: _playerVars
+                } | json_encode
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-a-media-youtube__player" id="{{ _containerId }}"></div>
+        </div>
+    {% endif %}
+{% endmacro %}

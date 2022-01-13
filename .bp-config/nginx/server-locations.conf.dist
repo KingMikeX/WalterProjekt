@@ -1,0 +1,53 @@
+# try to serve file directly, fallback to rewrite
+location / {
+    #{{nginxLocationHtpasswdBasicAuth}}#
+    #{{nginxLocationAdditionalSecurity}}#
+    try_files $uri @rewriteapp;
+}
+
+# prevent direct download of .htpasswd file
+location ~* \.htpasswd$ {
+    return 404;
+}
+
+# rewrite all to index.php
+location @rewriteapp {
+    rewrite ^(.*)$ /index.php/$1 last;
+}
+
+# symfony configuration
+location ~ ^/index\.php(/|$) {
+    fastcgi_pass php_fpm;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    # When you are using symlinks to link the document root to the
+    # current version of your application, you should pass the real
+    # application path instead of the path to the symlink to PHP FPM.
+    # Otherwise, PHP's OPcache may not properly detect changes to your PHP files
+    # see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    fastcgi_param HTTP_PROXY "";
+    # Prevents URIs that include the front controller.
+    # This will return 404, only allowing internal redirections.
+    # http://domain.tld/app.php/some-path
+    fastcgi_param DOCUMENT_ROOT $realpath_root;
+    internal;
+}
+
+# return 404 for all other php files not matching the front controller
+# this prevents access to other php files you don't want to be accessible.
+location ~ \.php$ {
+    return 404;
+}
+
+# define caching of assets
+location ~* \.(js|css|png|jpg|jpeg|gif|ico|webp|txt)$ {
+    expires 8h;
+    log_not_found off;
+    gzip on;
+}
+
+# SUP-3233 - include 3rd Party Fonts
+location ~* \.(eot|ttf|woff)$ {
+    add_header Access-Control-Allow-Origin *;
+}

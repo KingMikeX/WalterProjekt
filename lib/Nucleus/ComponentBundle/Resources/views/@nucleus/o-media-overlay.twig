@@ -1,0 +1,43 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/m-button.twig" as mButton %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-media-overlay", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-media-overlay"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-o-media-overlay__content">
+                {{ core.renderComponents(data.embeddedMedia) }}
+            </div>
+            {{ mButton.render({
+                component: "nucleus/m-button",
+                icon: "nucleus/close",
+                isNegative: true,
+                htmlAttributes: {
+                    classList: [
+                        "nuc-o-media-overlay__close-button"
+                    ]
+                },
+                objectButton: {
+                    component: "nucleus/a-button",
+                    textTitle: data.textTitleCloseButton
+                }
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

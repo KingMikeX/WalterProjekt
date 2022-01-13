@@ -1,0 +1,27 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-object", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-object"
+                ],
+                "type": data.type,
+                "data-data": data.urlData,
+                "data": data.urlData
+            }
+        }) %}
+
+        {# Markup #}
+        <object {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}></object>
+    {% endif %}
+{% endmacro %}

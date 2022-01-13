@@ -1,0 +1,30 @@
+# local development environment
+/.idea
+/.docker-sync
+/docker-config
+
+# testing tools and assets
+/tools
+/assets/material
+
+# symfony files
+/var/cache
+/var/log
+
+# node temp files (may produce errors when included)
+/node_modules/.cache
+/node_modules/.bin
+
+# obsolete env-files and config dist-files
+/.env.dev
+/.env.dev.php
+/.env.local.php
+/.env.dist
+/.npmrc.dist
+/auth.json.dist
+/manifest.prod.temp.yml
+/manifest.prod.yml
+/manifest.qa.temp.yml
+/manifest.qa.yml
+/manifest.test.temp.yml
+/manifest.test.yml

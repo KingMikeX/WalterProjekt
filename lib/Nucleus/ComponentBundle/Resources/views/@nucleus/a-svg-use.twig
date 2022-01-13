@@ -1,0 +1,33 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-svg-use", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-svg-use"
+                ],
+                role: "img",
+                focusable: "false",
+                xmlns: "http://www.w3.org/2000/svg",
+                viewBox: data.viewBox
+            }
+        }) %}
+
+        {# Markup #}
+        <svg {{ render_attributes(data.htmlAttributes, null, data.extensions) }}>
+            {% if data.textTitle %}
+                <title>{{ data.textTitle }}</title>
+            {% endif %}
+            <use href="{{ data.urlSource }}"></use>
+        </svg>
+    {% endif %}
+{% endmacro %}

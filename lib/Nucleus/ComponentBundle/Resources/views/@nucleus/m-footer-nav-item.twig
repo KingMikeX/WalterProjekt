@@ -1,0 +1,33 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-footer-nav-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                class: "nuc-m-footer-nav-item"
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: {
+                    class: "nuc-m-footer-nav-item__anchor"
+                },
+                embedded: [
+                    data.text
+                ]
+            })) }}
+        </li>
+    {% endif %}
+{% endmacro %}

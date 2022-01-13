@@ -1,0 +1,4 @@
+registry=https://schwarzit.jfrog.io/schwarzit/api/npm/npm/
+_auth=#{{credentialsArtifactoryTechUserNpm}}#
+email=sit-bc-kunde-php-development-all@mail.schwarz
+always-auth=true

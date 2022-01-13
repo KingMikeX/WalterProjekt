@@ -1,0 +1,58 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-tab-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-tab-item",
+                    data.isSelected | get_modifier("nuc-m-tab-item--selected")
+                ],
+                role: "tab"
+            }
+        }) %}
+
+        {% set embeddedButton %}
+            {{ data.text }}
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    classList: [
+                        "nuc-m-tab-item__icon-left"
+                    ]
+                },
+                id: "nucleus/left",
+                size: "inherit"
+            }) }}
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    classList: [
+                        "nuc-m-tab-item__icon-right"
+                    ]
+                },
+                id: "nucleus/right",
+                size: "inherit"
+            }) }}
+        {% endset %}
+
+        {# Markup #}
+        {{ aButton.render(data.objectButton | merge_data({
+            component: "nucleus/a-button",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions,
+            embedded: [ embeddedButton ]
+        })) }}
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,76 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-button", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-button",
+                    data.theme | get_modifier("nuc-m-button--theme", {property: "theme", omitDefaultModifier: true}),
+                    data.type | get_modifier("nuc-m-button--type", {property: "type", omitDefaultModifier: true}), 
+                    data.isDisabled | get_modifier("nuc-m-button--disabled"),
+                    data.isNegative | get_modifier("nuc-m-button--negative"),
+                    data.iconPosition | get_modifier("nuc-m-button--icon-position", {
+                        additionalCondition: data.icon is not empty and data.text is not empty,
+                        property: "iconPosition",
+                        omitDefaultModifier: true
+                    })
+                ]
+            }
+        }) %}
+
+        {% set buttonEmbedded %}
+            {% if data.icon is not empty or data.text is not empty %}
+                {% if data.icon is not empty %}
+                    {{ aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-m-button__icon"
+                        },
+                        size: "inherit",
+                        id: data.icon
+                    }) }}
+                {% endif %}
+                {% if data.text is not empty %}
+                    <span class="nuc-m-button__text">{{ data.text }}</span>
+                {% endif %}
+            {% else %}
+                {{ throw_exception("Either text, icon or both must be provided in nucleus/m-button") }}
+            {% endif %}
+        {% endset %}
+
+        {# Markup #}
+        {% if data.objectButton is not empty %}
+            {{ aButton.render(data.objectButton | merge_data({
+                component: "nucleus/a-button",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [ buttonEmbedded ],
+                isDisabled: data.isDisabled
+            })) }}
+        {% elseif data.objectAnchor is not empty %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [ buttonEmbedded ],
+                isDisabled: data.isDisabled
+            })) }}
+        {% else %}
+            {{ throw_exception("Either objectButton or objectAnchor must be provided in nucleus/m-button") }}
+        {% endif %}
+    {% endif %}
+{% endmacro %}

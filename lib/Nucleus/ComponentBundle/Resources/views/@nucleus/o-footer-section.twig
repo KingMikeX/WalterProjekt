@@ -1,0 +1,28 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-footer-section", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-footer-section",
+                    data.align | get_modifier("nuc-o-footer-section--align"),
+                    data.isColumnLayout | get_modifier("nuc-o-footer-section--column-layout", {additionalCondition: data.embedded | length})
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </div>
+    {% endif %}
+{% endmacro %}

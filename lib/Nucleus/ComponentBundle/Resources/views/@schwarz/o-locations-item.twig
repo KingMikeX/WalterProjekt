@@ -1,0 +1,64 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-tab-content.twig" as aTabContent %}
+    {% import "@nucleus/m-tab-item.twig" as mTabItem %}
+    {% import "@nucleus/o-tab-container.twig" as oTabContainer %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-locations-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "swrz-o-locations-item"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% set _tabItems %}
+                {% for _map in data.embeddedSVGMaps %}
+                    {{ mTabItem.render({
+                        component: "nucleus/m-tab-item",
+                        text: _map.text
+                    }) }}
+                {% endfor %}
+            {% endset %}
+            {% set _tabContents %}
+                {% for _map in data.embeddedSVGMaps %}
+                    {% set _tabContent %}
+                        {{ core.renderComponent(_map) }}
+                    {% endset %}
+                    {{ aTabContent.render({
+                        component: "nucleus/a-tab-content",
+                        htmlAttributes: {
+                            classList: [
+                                "swrz-o-locations-item__content"
+                            ]
+                        },
+                        embedded: [
+                            _tabContent
+                        ]
+                    }) }}
+                {% endfor %}
+            {% endset %}
+            {{ oTabContainer.render({
+                component: "nucleus/o-tab-container",
+                htmlAttributes: {
+                    "data-map-tab": data.nameBrand | lower
+                },
+                itemsAlign: "center",
+                textAriaLabel: data.textAriaLabelTabContainer | join,
+                embeddedItems: [ _tabItems ],
+                embeddedContent: [ _tabContents ]
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

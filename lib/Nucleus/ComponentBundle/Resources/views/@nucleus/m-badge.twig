@@ -1,0 +1,66 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-badge", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+    
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _isClickable = data.objectAnchor is not empty or data.objectButton is not empty %}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-badge",
+                    data.theme | get_modifier("nuc-m-badge--theme"),
+                    data.isOutlined | get_modifier("nuc-m-badge--outlined"),
+                    data.isNegative | get_modifier("nuc-m-badge--negative"),
+                    data.size | get_modifier("nuc-m-badge--size"),
+                    _isClickable | get_modifier("nuc-m-badge--clickable")
+                ]
+            }
+        }) %}
+        
+        {% set embeddedBadge %}
+            {{ data.text }}
+            {% if data.objectIcon is not empty %}
+                {{ aIcon.render(data.objectIcon | merge_data({
+                    component: "nucleus/a-icon",
+                    htmlAttributes: {
+                        class: "nuc-m-badge__icon"
+                    },
+                    size : (data.size == "basic" ? "16" : (data.size == "small" ? "8" : data.size == "large" ? "24"))
+                })) }}
+            {% endif %}
+        {% endset %}
+        
+        {# Markup #}
+        {% if data.objectAnchor is not empty %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [ embeddedBadge ]
+            })) }}
+        {% elseif data.objectButton is not empty %}
+            {{ aButton.render(data.objectButton| merge_data({
+                component: "nucleus/a-button",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [ embeddedBadge ]
+            })) }}
+        {% else %}
+            <span {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+                {{ embeddedBadge }}
+            </span>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

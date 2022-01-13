@@ -1,0 +1,23 @@
+{
+    "name": "nucleus/core-bundle",
+    "version": "2.1.0",
+    "description": "nucleus core bundle that includes twig extensions with filters and functions",
+    "license": "proprietary",
+    "type": "symfony-bundle",
+    "autoload": {
+        "psr-4": {
+            "Nucleus\\CoreBundle\\": ""
+        }
+    },
+    "require": {
+        "php": "^7.0",
+        "twig/twig": "^1.0|^2.0",
+        "ext-json": "*"
+    },
+    "extra": {
+        "branch-alias": null
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}

@@ -1,0 +1,62 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@schwarz/m-branch-logo.twig" as mBranchLogo %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-sticky-bar", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-o-sticky-bar"
+                ]
+            }
+        }) %}
+
+        {% set buttonContent %}
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    class: "scwz-o-sticky-bar__icon"
+                },
+                id: "nucleus/up",
+                size: "16"
+            }) }}
+            <span class="scwz-o-sticky-bar__text">
+                {{ data.text }}
+            </span>
+        {% endset %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="scwz-o-sticky-bar__content">
+                {{ mBranchLogo.render(data.objectBranchLogo | merge_data({
+                    htmlAttributes: {
+                        classList: [
+                            "scwz-o-sticky-bar__badge"
+                        ]
+                    }
+                })) }}
+
+                {{ aButton.render({
+                    component: "nucleus/a-button",
+                    textTitle: data.text,
+                    htmlAttributes: {
+                        class: "scwz-o-sticky-bar__button"
+                    },
+                    embedded: [
+                        buttonContent
+                    ]
+                }) }}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

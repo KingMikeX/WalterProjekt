@@ -1,0 +1,28 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-button", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-button"
+                ],
+                disabled: data.isDisabled,
+                type: data.type,
+                title: data.textTitle
+            }
+        }) %}
+
+        {# Markup #}
+        <button {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </button>
+    {% endif %}
+{% endmacro %}

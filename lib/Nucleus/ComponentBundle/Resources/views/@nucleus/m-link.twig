@@ -1,0 +1,90 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-text.twig" as aText %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-link", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-link",
+                    data.isNegative | get_modifier("nuc-m-link--negative"),
+                    data.iconPosition | get_modifier("nuc-m-link--icon-position", {
+                        additionalCondition: data.icon is not empty and data.text is not empty,
+                        property: "iconPosition",
+                        omitDefaultModifier: true
+                    })
+                ]
+            }
+        }) %}
+        {% if data.size == "basic" %}
+            {% set _iconSize = "24" %}
+        {% elseif data.size == "small" %}
+            {% set _iconSize = "16" %}
+        {% elseif data.size == "large" %}
+            {% set _iconSize = "32" %}
+        {% endif %}
+
+        {% if (data.text is empty and data.icon is empty) %}
+            {{ throw_exception("You must provide either a text or an icon in nucleus/m-link.") }}
+        {% endif %}
+
+        {# Markup #}
+        {% set embeddedContent %}
+            {% if data.icon is not empty %}
+                {{ aIcon.render({
+                    component: "nucleus/a-icon",
+                    htmlAttributes: {
+                        class: "nuc-m-link__icon"
+                    },
+                    id: data.icon,
+                    size: _iconSize
+                }) }}
+            {% endif %}
+            {% if data.text is not empty %}
+                {{ aText.render({
+                    component: "nucleus/a-text",
+                    htmlAttributes: {
+                        class: "nuc-m-link__text"
+                    },
+                    content: data.text,
+                    type: data.size
+                }) }}
+            {% endif %}
+        {% endset %}
+
+        {% if data.objectAnchor is not empty %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [
+                    embeddedContent
+                ]
+            })) }}
+        {% elseif data.objectButton is not empty %}
+            {{ aButton.render(data.objectButton | merge_data({
+                component: "nucleus/a-button",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [
+                    embeddedContent
+                ]
+            })) }}
+        {% else %}
+            {{ throw_exception("Either objectAnchor or objectButton must be provided in nucleus/m-link") }}
+        {% endif %}
+    {% endif %}
+{% endmacro %}

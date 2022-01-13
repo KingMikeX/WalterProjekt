@@ -1,0 +1,84 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-textbody.twig" as aTextbody %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-alert", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _icon = data.icon %}
+        {% if _icon is empty %}
+            {% if data.theme == "danger" %} {% set _icon = "nucleus/danger" %}
+            {% elseif data.theme == "success" %} {% set _icon = "nucleus/success" %}
+            {% elseif data.theme == "warning" %} {% set _icon = "nucleus/warning" %}
+            {% else %} {% set _icon = "nucleus/info" %} {% endif %}
+        {% endif %}
+
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-alert",
+                    data.theme | get_modifier("nuc-m-alert--theme", {property: "theme", omitDefaultModifier: true})
+                ],
+                "role": (data.theme in ["danger", "warning"]) ? "alert" : null
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.hasNoIcon is empty %}
+                {{ aIcon.render({
+                    component: "nucleus/a-icon",
+                    htmlAttributes: {
+                        class: "nuc-m-alert__icon",
+                        "aria-hidden": "true"
+                    },
+                    id: _icon,
+                    size: "inherit"
+                }) }}
+            {% endif %}
+            <div class="nuc-m-alert__body">
+                {% if data.headline is not empty %}
+                    <div class="nuc-m-alert__heading">{{ data.headline }}</div>
+                {% endif %}
+                {% if data.content is not empty %}
+                    <p class="nuc-m-alert__content">{{ core.renderContent(data.content, data.isRawContent) }}</p>
+                {% elseif data.objectTextbody is not empty %}
+                    {{ aTextbody.render(data.objectTextbody | merge_data({
+                        component: "nucleus/a-textbody",
+                        theme: "inherit"
+                    })) }}
+                {% elseif data.embedded is not empty %}
+                    {{ core.renderComponents(data.embedded) }}
+                {% else %}
+                    {{ throw_exception("Either content, objectTextbody or embedded must be privided in nucleus/m-alert") }}
+                {% endif %}
+            </div>
+            {% if data.isClosable %}
+                {{ aButton.render({
+                    component: "nucleus/a-button",
+                    htmlAttributes: {
+                        class: "nuc-m-alert__close-button"
+                    },
+                    embedded: [
+                        {
+                            component: "nucleus/a-icon",
+                            htmlAttributes: {
+                                class: "nuc-m-alert__close-icon"
+                            },
+                            id: "nucleus/close",
+                            size: "inherit"
+                        }
+                    ],
+                    textTitle: data.textCloseButtonTitle
+                }) }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

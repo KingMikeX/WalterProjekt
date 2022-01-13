@@ -1,0 +1,95 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/m-button.twig" as mButton %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-overlay", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-overlay",
+                    "hidden@all"
+                ],
+                "data-overlay-auto-triggered": data.isAutoTriggered
+            }
+        }) %}
+
+        {% set _headlineId = random() %}
+        {% set htmlAttributesDialog = {
+            classList: [
+                "nuc-o-overlay__dialog",
+                data.format | get_modifier("nuc-o-overlay--format")
+            ],
+            "role": "dialog",
+            "aria-modal": "true",
+            "aria-label": data.textAriaLabel,
+            "aria-labelledby": data.textAriaLabel is empty ? _headlineId : false
+        } %}
+
+        {% set htmlAttributesHeadline = {
+            classList: [
+                "nuc-o-overlay__headline"
+            ],
+            id: _headlineId
+        } %}
+
+        {% if (data.textHeadline is empty and data.textAriaLabel is empty) %}
+            {{ throw_exception("You must provide either a headline or an aria-label for the dialog in nuleus/o-overlay.") }}
+        {% endif %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div {{ render_attributes(htmlAttributesDialog) }}>
+                <div class="nuc-o-overlay__content">
+                    <header class="nuc-o-overlay__header">
+                        {% if data.textHeadline is not empty %}
+                            <{{ data.tagHeadline }} {{ render_attributes(htmlAttributesHeadline) }}>
+                                {{ data.textHeadline }}
+                            </{{ data.tagHeadline }}>
+                        {% endif %}
+                        {{ mButton.render({
+                            component: "nucleus/m-button",
+                            icon: "nucleus/close",
+                            isNegative: true,
+                            htmlAttributes: {
+                                classList: [
+                                    "nuc-o-overlay__close-button"
+                                ],
+                                title: data.textTitleCloseButton
+                            },
+                            objectButton: {
+                                component: "nucleus/a-button"
+                            }
+                        }) }}
+                    </header>
+                    <main class="nuc-o-overlay__body">
+                        {{ core.renderComponents(data.embeddedContent) }}
+                    </main>
+                    {% if data.textCloseButtonBottom is not empty %}
+                        <footer class="nuc-o-overlay__footer">
+                            {{ mButton.render({
+                                component: "nucleus/m-button",
+                                text: data.textCloseButtonBottom,
+                                htmlAttributes: {
+                                    classList: [
+                                        "nuc-o-overlay__close-button-bottom"
+                                    ]
+                                },
+                                objectButton: {
+                                    component: "nucleus/a-button"
+                                }
+                            }) }}
+                        </footer>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

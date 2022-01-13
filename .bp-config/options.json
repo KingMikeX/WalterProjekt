@@ -1,0 +1,11 @@
+{
+  "WEB_SERVER": "nginx",
+  "WEBDIR": "public",
+  "PHP_VERSION": "{PHP_74_LATEST}",
+  "COMPOSER_VENDOR_DIR": "vendor/",
+  "COMPOSER_INSTALL_OPTIONS": [
+    "--no-interaction",
+    "--no-scripts"
+  ],
+  "FPM_CATCH_WORKERS_OUTPUT": "yes"
+}

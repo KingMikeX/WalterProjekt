@@ -1,0 +1,6 @@
+framework:
+    test: true
+
+# This will deactivate complete session handling. Later maybe needed for testing purposes.
+#    session:
+#        storage_id: session.storage.mock_file

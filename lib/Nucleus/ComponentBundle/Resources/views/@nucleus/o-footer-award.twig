@@ -1,0 +1,51 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-image.twig" as aImage %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-footer-award", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                class: "nuc-o-footer-award"
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% set embeddedAnchor %}
+                {{ aImage.render ( data.objectImage | merge_data ({
+                    component: "nucleus/a-image",
+                    htmlAttributes: {
+                        class: "nuc-o-footer-award__image"
+                    }
+                })) }}
+                {% if data.text is not empty %}
+                    <span class="nuc-o-footer-award__text">{{ data.text }}</span>
+                {% endif %}
+            {% endset %}
+            {% if data.objectAnchor is not empty %}
+                {{ aAnchor.render(data.objectAnchor | merge_data({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        class: "nuc-o-footer-award__anchor"
+                    },
+                    embedded: [
+                        embeddedAnchor
+                    ]
+                })) }}
+            {% else %}
+                <div class="nuc-o-footer-award__anchor-dummy">
+                    {{ embeddedAnchor }}
+                </div>
+            {% endif %}
+        </li>
+    {% endif %}
+{% endmacro %}

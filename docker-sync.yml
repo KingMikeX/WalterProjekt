@@ -1,0 +1,32 @@
+# modified version for docker-sync 0.4.*
+# set your desired sync-strategy "native_osx" or "unison" and modify docker-compose.yml according to changes
+#
+# check your version with $ docker-sync -v
+
+version: "2"
+options:
+    verbose: false
+    cli_mode: 'auto'
+syncs:
+    WalterProjekt-sync:
+        notify_terminal: false
+        src: '.'
+        sync_strategy: 'native_osx'
+#        sync_strategy: 'unison'
+        sync_excludes: ['.git', '.idea', '.DS_Store', '._.DS_Store', 'docker-config']
+        sync_excludes_type: 'Name'
+        sync_userid: 1010
+
+        # see https://docs.docker.com/docker-for-mac/osxfs-caching/#cached
+        # other unison options can also be specified here, which will be used when run under osx, and ignored when run under linux
+        host_disk_mount_mode: 'cached'
+
+        # monit can be used to monitor the health of unison in the native_osx strategy and can restart unison if it detects a problem
+        # optional: use this to switch monit monitoring on
+        monit_enable: true
+
+        # optional: use this to change how many seconds between each monit check (cycle)
+        monit_interval: 10
+
+        # optional: use this to change how many consecutive times high cpu usage must be observed before unison is restarted
+        monit_high_cpu_cycles: 2

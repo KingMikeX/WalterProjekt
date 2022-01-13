@@ -1,0 +1,67 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-image.twig" as aImage %}
+    {% import "@nucleus/a-source.twig" as aSource %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-picture", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-picture",
+                    data.type | get_modifier("nuc-m-picture--type"),
+                    data.ratio | get_modifier("nuc-m-picture--ratio", {additionalCondition: data.type in ["fixed-ratio", "teaser-layout"]})
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <picture {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.objectSourceLg is not empty %}
+                {{ aSource.render(data.objectSourceLg | merge_data({
+                    htmlAttributes: {
+                        class: "nuc-m-picture__source"
+                    },
+                    viewport: "lg"
+                })) }}
+            {% endif %}
+            {% if data.objectSourceMd is not empty %}
+                {{ aSource.render(data.objectSourceMd | merge_data({
+                    htmlAttributes: {
+                        class: "nuc-m-picture__source"
+                    },
+                    viewport: "md"
+                })) }}
+            {% endif %}
+            {% if data.objectSourceSm is not empty %}
+                {{ aSource.render(data.objectSourceSm | merge_data({
+                    htmlAttributes: {
+                        class: "nuc-m-picture__source"
+                    },
+                    viewport: "sm"
+                })) }}
+            {% endif %}
+            {{ aSource.render(data.objectSourceXs | merge_data({
+                htmlAttributes: {
+                    class: "nuc-m-picture__source"
+                },
+                viewport: "xs"
+            })) }}
+            {{ aImage.render({
+                component: "nucleus/a-image",
+                htmlAttributes: {
+                    class: "nuc-m-picture__image"
+                },
+                urlSource: data.objectSourceXs.urlSourceLow,
+                textAlternative: data.textAlternative
+            }) }}
+        </picture>
+    {% endif %}
+{% endmacro %}

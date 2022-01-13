@@ -1,0 +1,40 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-source", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _breakpoints = {
+            xs: 0,
+            sm: 600,
+            md: 960,
+            lg: 1280
+        } %}
+        {% set _breakPoint = _breakpoints[data.viewport] %}
+        {% set _sourceset = data.urlSource ~ " 1x" %}
+
+        {% if data.urlSource2x is not empty %}
+            {% set _sourceset = _sourceset ~ ", " ~ data.urlSource2x ~ " 2x" %}
+        {% endif %}
+
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-source"
+                ],
+                media: _breakPoint ? "(min-width:" ~ _breakPoint ~ "px)" : null,
+                srcset: data.urlSourceLow,
+                "data-srcset": _sourceset
+            }
+        }) %}
+
+        {# Markup #}
+        <source {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }} />
+    {% endif %}
+{% endmacro %}

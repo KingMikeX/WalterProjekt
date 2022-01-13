@@ -1,0 +1,113 @@
+{% macro renderComponents(components) %}
+    {% import _self as core %}
+
+    {% if components is iterable %}
+        {% for component in components %}
+            {{ core.renderComponent(component) }}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% macro renderComponent(data) %}
+    {% if data.component is defined %}
+        {%- set packageName = "@" ~ data.component -%}
+
+        {%- if nucleus.modules["@" ~ data.component] is defined -%}
+            {%- import "@" ~ data.component ~ ".twig" as cmp -%}
+            {{ cmp.render(data) }}
+        {%- else -%}
+            <!-- [nucleus] Rendering Exception: Unknown Component -->
+            {% if not (app.debug is defined and not app.debug) %}
+                <div style="
+                    border: 2px solid rgb(255,165,0);
+                    padding: 16px;
+                    background: repeating-linear-gradient(
+                        45deg,
+                        rgba(255,165,0,0.1),
+                        rgba(255,165,0,0.1) 10px,
+                        transparent 10px,
+                        transparent 20px
+                    )
+                ">
+                    <strong>[nucleus] Rendering Exception: unknown component</strong>
+                </div>
+                <script>
+                    console.error('[nucleus] Rendering Exception: unknown component');
+                    console.groupCollapsed('   Exception Details:');
+                    console.log('Attempt to render unknown component "{{ data.component }}" ({{ packageName }}) via _core.renderComponent');
+                    console.log('Component Data:');
+                    console.log({{ data | json_encode | raw }});
+                    console.log('Stack Trace:');
+                    console.log({{ get_stack_trace() | json_encode | raw }});
+                    console.groupEnd();
+                </script>
+            {% endif %}
+        {%- endif -%}
+    {% else %}
+        {{ data | raw }}
+    {% endif %}
+{% endmacro %}
+
+{% macro renderContent(content, isRawContent, allowedTags) %}
+    {% if isRawContent %}
+        {% set content = content | striptags('<a><b><em><i><span><small><strong><u><q><mark><br><wbr>') %}
+
+        {% if allowedTags is not empty %}
+            {% set content = content | striptags(allowedTags) %}
+        {% endif %}
+
+        {{ content | raw }}
+    {% else %}
+        {{ content }}
+    {% endif %}
+{% endmacro %}
+
+{% macro renderValidationResults(data) %}
+    <!-- [nucleus] Validation Violation -->
+    {% if not (app.debug is defined and not app.debug) %}
+        {% if data._validation.hasErrors %}
+            <div style="
+                border: 2px solid rgb(255,165,0);
+                padding: 16px;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255,165,0,0.1),
+                    rgba(255,165,0,0.1) 10px,
+                    transparent 10px,
+                    transparent 20px
+                )
+            ">
+                <strong>[nucleus] Validation Error in "{{ data.component }}"</strong>
+            </div>
+        {% endif %}
+        {% if not (clientSideRendering is defined and clientSideRendering) %}
+            <script>
+                {% if data._validation.hasErrors %}
+                    console.error('[nucleus] Validation Error in "{{ data.component }}"');
+                {% else %}
+                    console.warn('[nucleus] Validation Warning in "{{ data.component }}"');
+                {% endif %}
+                console.groupCollapsed('   Validation Details:');
+                {% for error in data._validation.errors %}
+                    console.error('{{ error.message | escape("js") }}', {{ error | json_encode | raw }});
+                {% endfor %}
+                {% for warning in data._validation.warnings %}
+                    console.warn('{{ warning.message | escape("js") }}', {{ warning | json_encode | raw }});
+                {% endfor %}
+                console.log('Component Data:');
+                console.log({{ data | json_encode | raw }});
+                console.log('Stack Trace:');
+                console.log({{ get_stack_trace() | json_encode | raw }});
+                console.groupEnd();
+            </script>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro console(data, type = "log", label) %}
+    <script>
+        var label = {{ label | json_encode | raw }};
+        console.log((label ? "nucleus --> " + label : "nucleus"));
+        console[{{ type | json_encode | raw }}]({{ data | json_encode | raw }})
+    </script>
+{% endmacro %}

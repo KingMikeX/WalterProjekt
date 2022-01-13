@@ -1,0 +1,16 @@
+applications: 
+  - name: Symfony5Mike-test
+    buildpacks: 
+      - https://github.com/cloudfoundry/php-buildpack 
+    memory: 2GB 
+    disk_quota: 4GB 
+    instances: 1 
+    env: 
+      SYMFONY_ENV: test 
+      APP_ENV: test 
+      TZ: Europe/Berlin 
+    routes: 
+      - route: https://Symfony5Mike-test.apps.02.cf.eu01.stackit.schwarz
+    services: 
+        - Symfony5Mike-mysql-test
+        - Symfony5Mike-autoscaler-test

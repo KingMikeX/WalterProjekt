@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>SolMusic | HTML Template</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="SolMusic HTML Template">
+    <meta name="keywords" content="music, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="{{ asset('img/favicon.ico')}}" rel="shortcut icon"/>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}"/>
+
+    <!-- Main Stylesheets -->
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}"/>
+
+</head>
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Header section -->
+<header class="header-section clearfix">
+    <a href="#" class="site-logo">
+        <img src="{{ asset('img/dollar.png')}}" height=50px width="50px" alt="">
+    </a>
+    {% if is_granted('IS_ANONYMOUS') %}
+        <div class="header-right">
+            <span>|</span>
+            <div class="user-panel">
+                <a href="{{ path('app_login') }}" class="login">Login</a>
+                <a href="{{ path('register') }}" class="register">Create an account</a>
+            </div>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="header-right">
+            <span>|</span>
+            <div class="user-panel">
+                <a href="{{ path('admin.dashboard') }}" class="login">Admin</a>
+            </div>
+        </div>
+    {% endif %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="header-right">
+            <span>|</span>
+            <div class="user-panel">
+                <a href="{{ path('app_logout') }}" class="login">Logout</a>
+            </div>
+        </div>
+    {% endif %}
+    <ul class="main-menu">
+        <li><a href="{{ path('home') }}">Home</a></li>
+        <li><a href="#">Bankaccount</a>
+            <ul class="sub-menu">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li><a href="#">Wallet</a></li>
+                    <li><a href="{{ path('transfer_history') }}">Transferhistory</a></li>
+                    <li><a href="{{ path('depo.create') }}">Open Depo</a></li>
+                    <li><a href="{{ path('depo.table') }}">Your Depo's</a></li>
+                    <li><a href="{{ path('transfers.transfer') }}">Transfer</a></li>
+                {% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
+                    <li><a href="#">Wallet</a></li>
+                    <li><a href="{{ path('register') }}">Transferhistory</a></li>
+                    <li><a href="{{ path('register') }}">Open Depo</a></li>
+                    <li><a href="{{ path('register') }}">Your Depo's</a></li>
+                    <li><a href="{{ path('register') }}">Transfer</a></li>
+                {% endif %}
+            </ul>
+        </li>s
+        <li><a href="{{ path('message.show') }}">Benachrichtungen</a></li>
+        <li><a href="{{ asset('contact.html')}}">Profil</a>
+            <ul class="sub-menu">
+                <li><a href="#">Anzeigen</a></li>
+                <li><a href="#">blablabla</a></li>
+            </ul></li>
+    </ul>
+</header>
+<!-- Header section end -->
+{% block body %} {% endblock %}
+<!-- Footer section -->
+<footer class="footer-section">
+</footer>
+<!-- Footer section end -->
+
+<!--====== Javascripts & Jquery ======-->
+<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js')}}"></script>
+<script src="{{ asset('js/jquery.slicknav.min.js')}}"></script>
+<script src="{{ asset('js/owl.carousel.min.js')}}"></script>
+<script src="{{ asset('js/mixitup.min.js')}}"></script>
+<script src="{{ asset('js/main.js')}}"></script>
+
+</body>
+</html>

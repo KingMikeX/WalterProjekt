@@ -1,0 +1,22 @@
+services:
+    nucleus_core.twig.core:
+        class: Nucleus\CoreBundle\Twig\CoreExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+    nucleus_core.twig.debug:
+        class: Nucleus\CoreBundle\Twig\DebugExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+    nucleus_core.twig.gtm:
+        class: Nucleus\CoreBundle\Twig\GtmExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+    nucleus_core.twig.schema:
+        class: Nucleus\CoreBundle\Twig\SchemaExtension
+        arguments: ['%kernel.project_dir%']
+        public: false
+        tags:
+            - { name: twig.extension }

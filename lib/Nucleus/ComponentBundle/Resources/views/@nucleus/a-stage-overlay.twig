@@ -1,0 +1,29 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-stage-overlay", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-stage-overlay",
+                    data.belowStageTo | get_modifier("nuc-a-stage-overlay--below-stage"),
+                    data.limitToSaveZoneFrom | get_modifier("nuc-a-stage-overlay--limit-to-save-zone"),
+                    "hidden@all"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </div>
+    {% endif %}
+{% endmacro %}

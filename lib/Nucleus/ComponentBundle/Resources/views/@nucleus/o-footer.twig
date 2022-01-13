@@ -1,0 +1,26 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-footer", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                class: "nuc-o-footer"
+            }
+        }) %}
+
+        {# Markup #}
+        <footer {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="nuc-o-footer__main">
+                {{ core.renderComponents(data.embedded) }}
+            </div>
+        </footer>
+    {% endif %}
+{% endmacro %}

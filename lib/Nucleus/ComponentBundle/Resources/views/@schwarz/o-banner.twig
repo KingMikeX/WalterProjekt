@@ -1,0 +1,79 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/o-stage.twig" as oStage %}
+    {% import "@nucleus/a-stage-overlay.twig" as aStageOverlay %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-banner", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-o-banner",
+                    data.offset | get_modifier("scwz-o-banner--offset"),
+                    data.theme | get_modifier("scwz-o-banner--theme", {
+                        property: "theme",
+                        omitDefaultModifier: true
+                    }),
+                    data.isInverted | get_modifier("scwz-o-banner--inverted")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        {% set embeddedOverlay %}
+            <div class="scwz-o-banner__overlay-content">
+                <{{ data.tagHeadline }} class="scwz-o-banner__headline">
+                    {{ core.renderContent(data.contentHeadline, data.isRawContentHeadline, "<wbr><br>") }}
+                </{{ data.tagHeadline }}>
+                {% if data.contentDescription is not empty %}
+                    <p class="scwz-o-banner__content">
+                        {{ core.renderContent(data.contentDescription, data.isRawContentDescription) }}
+                    </p>
+                {% endif %}
+                {% if data.embedded is not empty %}
+                    <div class="scwz-o-banner__embedded">
+                        {{ core.renderComponents(data.embedded) }}
+                    </div>
+                {% endif %}
+                <div class="scwz-o-banner__arrow">
+                    <svg class="scwz-o-banner__arrow-sizer" viewBox="0 0 1 1"></svg>
+                </div>
+            </div>
+        {% endset %}
+
+        {{ oStage.render(data.objectStage | merge_data({
+            component: "nucleus/o-stage",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions,
+            widthXs: "12",
+            widthSm: "12",
+            widthMd: 12 - data.offset,
+            widthLg: 12 - data.offset,
+            align: {
+                md: data.isInverted ? "right" : "left"
+            },
+            offset: {
+                md: data.offset
+            },
+            keepRatioTo: "sm",
+            embeddedOverlay: [
+                aStageOverlay.render({
+                    component: "nucleus/a-stage-overlay",
+                    htmlAttributes: {
+                        class: "scwz-o-banner__overlay"
+                    },
+                    belowStageTo: "sm",
+                    embedded: [ embeddedOverlay ]
+                })
+            ]
+        })) }}
+    {% endif %}
+{% endmacro %}

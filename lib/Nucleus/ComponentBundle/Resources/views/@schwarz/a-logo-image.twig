@@ -1,0 +1,24 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/a-logo-image", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-a-logo-image"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <img {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }} role="img" src="{{ data.urlSource }}" alt="{{ data.textAlternative }}">
+    {% endif %}
+{% endmacro %}

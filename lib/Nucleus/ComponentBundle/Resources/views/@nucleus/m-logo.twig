@@ -1,0 +1,44 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/m-logo", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-m-logo"
+                ]
+            }
+        }) %}
+
+        {% set logoImage %}
+            {{ core.renderComponent(data.objectLogoImage) }}
+        {% endset %}
+
+        {# Markup #}
+        {% if data.objectAnchor is not empty %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: data.htmlAttributes,
+                styleAttributes: data.styleAttributes,
+                extensions: data.extensions,
+                embedded: [
+                    logoImage
+                ]
+            })) }}
+        {% else %}
+            <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+                {{ logoImage }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+

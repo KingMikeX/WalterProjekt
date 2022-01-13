@@ -1,0 +1,34 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-header-brand-nav-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                class: "scwz-m-header-brand-nav-item"
+            }
+        }) %}
+
+        {# Markup #}
+        <li {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: {
+                    class: "scwz-m-header-brand-nav-item__anchor"
+                },
+                target: "blank",
+                embedded: [
+                    data.text
+                ]
+            })) }}
+        </li>
+    {% endif %}
+{% endmacro %}

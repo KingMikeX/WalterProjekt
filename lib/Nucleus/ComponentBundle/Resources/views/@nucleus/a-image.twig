@@ -1,0 +1,26 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-image", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-image"
+                ],
+                src: data.urlSource,
+                alt: data.textAlternative
+            }
+        }) %}
+
+        {# Markup #}
+        <img {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }} />
+    {% endif %}
+{% endmacro %}

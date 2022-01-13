@@ -1,0 +1,10 @@
+# additional pipeline variables for token replacement task
+# https://github.com/qetza/vsts-replacetokens-task#readme
+
+phpVersion: "7.4"
+nginxConfMapAndGeo: |+1
+    # no config added
+nginxLocationAdditionalSecurity: |+1
+    # no config added
+nginxLocationHtpasswdBasicAuth: |+1
+    # no config added

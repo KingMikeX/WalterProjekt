@@ -1,0 +1,31 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/a-flash-corner", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-a-flash-corner",
+                    data.position | get_modifier("scwz-a-flash-corner--position"),
+                    data.theme | get_modifier("scwz-a-flash-corner--theme", {
+                        property: "theme",
+                        omitDefaultModifier: true
+                    })
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <span class="scwz-a-flash-corner__content">{{ data.text }}</span>
+        </div>
+    {% endif %}
+{% endmacro %}

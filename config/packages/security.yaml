@@ -1,0 +1,105 @@
+security:
+    # new since symfony 5.1 and upcoming standard
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
+    enable_authenticator_manager: false
+
+    encoders:
+        App\Entity\AppUser:
+            algorithm: bcrypt
+        App\Entity\User:
+            algorithm: auto
+
+
+
+    role_hierarchy:
+        ROLE_ADMIN:        [ROLE_USER]
+        ROLE_SUPER_ADMIN:  [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        app_db_provider:
+            entity:
+                class: 'App\Entity\AppUser'
+                property: username
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+        # used to reload user from session & other features (e.g. switch_user)
+
+    access_denied_url: app_login
+
+    firewalls:
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            anonymous: ~
+            provider: app_db_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_home
+                always_use_default_target_path: true
+            logout:
+                path: app_logout
+                target: app_login
+                invalidate_session: true
+            guard:
+                authenticators:
+                    - App\Security\CustomAuthenticator
+            # ...
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+                # by default, the feature is enabled by checking a
+                # checkbox in the login form (see below), uncomment the
+                # following line to always enable it.
+                #always_remember_me: true
+
+    access_control:
+
+        #     ADMIN PAGE -- Anynomus RULES
+        - { path: ^/admin/, roles: ROLE_ADMIN }
+        - { path: ^/admin/dashboard, roles: ROLE_ADMIN }
+
+        # user
+        - { path: ^/admin/user, roles: ROLE_ADMIN }
+        - { path: ^/admin/user/edit/, roles: ROLE_ADMIN }
+        - { path: ^/admin/user/delete/, roles: ROLE_ADMIN }
+        - { path: ^/admin/user/save/, roles: ROLE_ADMIN }
+
+        # depo
+        - { path: ^/admin/depos, roles: ROLE_ADMIN }
+        - { path: ^/admin/depos/edit/, roles: ROLE_ADMIN }
+        - { path: ^/admin/depos/delete/, roles: ROLE_ADMIN }
+        - { path: ^/admin/depos/edit/save, roles: ROLE_ADMIN }
+
+        # vcode
+        - { path: ^/admin/vcode, roles: ROLE_ADMIN }
+        - { path: ^/admin/vcode/generate, roles: ROLE_ADMIN }
+        - { path: ^/admin/vcode/delete/, roles: ROLE_ADMIN }
+
+        # transfer
+        - { path: ^/admin/transfers, roles: ROLE_ADMIN }
+        - { path: ^/admin/transfers/edit/, roles: ROLE_ADMIN }
+        - { path: ^/admin/transfers/delete/, roles: ROLE_ADMIN }
+        - { path: ^/admin/transfers/save/, roles: ROLE_ADMIN }
+
+        #     ANONYMOUS -- USER RULES
+        - { path: ^/app/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        #     LOGED IN -- USER RULES
+        - { path: ^/app, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
+
+        #     ADMIN --  USER RULES
+        - { path: ^/money/transfer, roles: ROLE_USER }
+
+        #     Transfers IN -- Anynomus RULES
+        - { path: ^/transfer, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/transfers/history, roles: IS_AUTHENTICATED_FULLY}

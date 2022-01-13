@@ -1,0 +1,30 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@schwarz/m-branch-logo.twig" as mBranchLogo %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz-group/o-branch-badge", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scgr-o-branch-badge"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        {{ mBranchLogo.render( data.objectBranchLogo | merge_data ({
+            component: "schwarz/m-branch-logo",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions
+        })) }}
+    {% endif %}
+{% endmacro %}

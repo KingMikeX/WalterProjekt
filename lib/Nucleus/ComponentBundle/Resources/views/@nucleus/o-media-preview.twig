@@ -1,0 +1,61 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-media-preview", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set _containerId = data.htmlAttributes.id | default("nuc-o-media-preview-" ~ random()) %}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-media-preview"
+                ],
+                id: _containerId
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ mPicture.render ( data.objectPicture | merge_data ({
+                component: "nucleus/m-picture",
+                htmlAttributes: {
+                    class: "nuc-o-media-preview__picture"
+                }
+            })) }}
+            {{ aButton.render({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-o-media-preview__trigger-button"
+                },
+                textTitle: data.textButtonTitle,
+                embedded: [
+                    aIcon.render({
+                        component: "nucleus/a-icon",
+                        htmlAttributes: {
+                            class: "nuc-o-media-preview__trigger-icon"
+                        },
+                        size: "88",
+                        id: "nucleus/play"
+                    })
+                ],
+                extensions: [
+                    {
+                        module: "nucleus/e-media-viewer",
+                        mode: data.mode,
+                        containerId: _containerId,
+                        objectMedia: data.objectMedia
+                    }
+                ]
+            }) }}
+        </div>
+    {% endif %}
+{% endmacro %}

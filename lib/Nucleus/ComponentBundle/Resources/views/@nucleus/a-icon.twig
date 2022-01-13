@@ -1,0 +1,46 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-svg-use.twig" as aSvgUse %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-icon", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-icon",
+                    data.size | get_modifier("nuc-a-icon--size")
+                ]
+            }
+        }) %}
+        {% set idParts = data.id | split("/") %}
+        {% set namespace = idParts[0] %}
+        {% set id = idParts[1] %}
+
+        {# Mappging for deprecated icon namespaces #}
+        {% if namespace == "legacy" %}
+            {% set namespace = "lidl" %}
+        {% elseif namespace == "travel-tmp" %}
+            {% set namespace = "lidl-travel" %}
+        {% elseif namespace == "nucleus" %}
+            {% if id not in ["placeholder","down","left","right","up","close","edit","check-mark","calendar","home","menu","play","info","warning","danger","success"] %}
+                {% set namespace = "lidl" %}
+            {% endif %}
+        {% endif %}
+
+        {# Markup #}
+        {{ aSvgUse.render({
+            component: "nucleus/a-svg-use",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions,
+            urlSource: asset("icons/" ~ namespace ~ ".svg", get_asset_namespace()) ~ "#" ~ id
+        }) }}
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,52 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-page-structure", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-page-structure"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <{{ data.tag }} {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.embeddedBeforeHeader is not empty %}
+                {{ core.renderComponents(data.embeddedBeforeHeader) }}
+            {% endif %}
+
+            <section class="nuc-a-page-structure__header">
+                {{ core.renderComponents(data.embeddedHeader) }}
+            </section>
+
+            {% if data.embeddedAfterHeader is not empty %}
+                {{ core.renderComponents(data.embeddedAfterHeader) }}
+            {% endif %}
+
+            <main class="nuc-a-page-structure__main">
+                {{ core.renderComponents(data.embeddedMain) }}
+            </main>
+
+            {% if data.embeddedBeforeFooter is not empty %}
+                {{ core.renderComponents(data.embeddedBeforeFooter) }}
+            {% endif %}
+
+            <section class="nuc-a-page-structure__footer">
+                {{ core.renderComponents(data.embeddedFooter) }}
+            </section>
+
+            {% if data.embeddedAfterFooter is not empty %}
+                {{ core.renderComponents(data.embeddedAfterFooter) }}
+            {% endif %}
+        </{{ data.tag }}>
+    {% endif %}
+{% endmacro %}

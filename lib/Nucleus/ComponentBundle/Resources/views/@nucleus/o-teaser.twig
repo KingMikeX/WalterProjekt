@@ -1,0 +1,76 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-textbody.twig" as aTextbody %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-teaser", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-teaser",
+                    (data.objectTextbody is not empty) | get_modifier("nuc-o-teaser--text")
+                ]
+            }
+        }) %}
+
+        {% set _embeddedAnchor %}
+            <div class="nuc-o-teaser__wrapper">
+                {{ mPicture.render ( data.objectPicture | merge_data ({
+                    component: "nucleus/m-picture",
+                    htmlAttributes: {
+                        class: "nuc-o-teaser__picture"
+                    }
+                })) }}
+                {% if data.textHeadline is not empty %}
+                    <div class="nuc-o-teaser__bar-wrapper">
+                        <header class="nuc-o-teaser__bar">
+                            <{{ data.headlineLevel }} class="nuc-o-teaser__headline">{{ data.textHeadline }}</{{ data.headlineLevel }}>
+                            {% if data.textSubHeadline is not empty %}
+                                <small class="nuc-o-teaser__subheadline">{{ data.textSubHeadline }}</small>
+                            {% endif %}
+                        </header>
+                    </div>
+                {% endif %}
+                {% if data.embeddedOverlay is not empty %}
+                    <div class="nuc-o-teaser__overlay">
+                        {{ core.renderComponents(data.embeddedOverlay) }}
+                    </div>
+                {% endif %}
+            </div>
+            {% if data.objectTextbody is not empty %}
+                {{ aTextbody.render(data.objectTextbody | merge_data({
+                    component: "nucleus/a-textbody",
+                    theme: "inherit",
+                    tag: "div",
+                    htmlAttributes: {
+                        class: "nuc-o-teaser__body"
+                    }
+                })) }}
+            {% endif %}
+        {% endset %}
+
+        {# Markup #}
+        <article {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.objectAnchor is not empty %}
+                {{ aAnchor.render(data.objectAnchor | merge_data({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        class: "nuc-o-teaser__anchor"
+                    },
+                    embedded: [ _embeddedAnchor ]
+                })) }}
+            {% else %}
+                {{ _embeddedAnchor | raw }}
+            {% endif %}
+        </article>
+    {% endif %}
+{% endmacro %}

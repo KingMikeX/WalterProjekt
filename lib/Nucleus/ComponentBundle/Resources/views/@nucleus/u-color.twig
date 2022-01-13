@@ -1,0 +1,49 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import _self as colors %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/u-color", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Markup #}
+        <style>
+            :root {
+                {% for colorName, gradations in data.coreColors %}
+                    {% for gradationName, gradationValue in gradations %}
+                        {% if gradationValue starts with "#" %}
+                            --core-color-{{ colorName }}-{{ gradationName }}: {{ gradationValue }};
+                            --core-color-{{ colorName }}-{{ gradationName }}-rgb: {{ colors.hexToRgb(gradationValue) }};
+                        {% elseif gradationValue starts with "--" %}
+                            --core-color-{{ colorName }}-{{ gradationName }}: var({{ gradationValue }});
+                            --core-color-{{ colorName }}-{{ gradationName }}-rgb: var({{ gradationValue }}-rgb);
+                        {% else %}
+                            {{ throw_exception("Invalid color value") }}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            }
+        </style>
+    {% endif %}
+{% endmacro %}
+
+{% macro hexToRgb(hexColor) %}
+    {%- set colorLength = hexColor | length %}
+    {%- if colorLength == 4 %}
+        {%- set hexColor = "#" ~ hexColor[1:1] ~ hexColor[1:1] ~ hexColor[2:1] ~ hexColor[2:1] ~ hexColor[3:1] ~ hexColor[3:1] %}
+    {%- elseif colorLength != 7 %}
+        {{ throw_exception("Invalid hex color") }}
+    {%- endif %}
+
+    {%- set hexValueMaping = { "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15} %}
+
+    {%- set red = hexValueMaping[hexColor[1:1]] * 16 + hexValueMaping[hexColor[2:1]] %}
+    {%- set green = hexValueMaping[hexColor[3:1]] * 16 + hexValueMaping[hexColor[4:1]] %}
+    {%- set blue = hexValueMaping[hexColor[5:1]] * 16 + hexValueMaping[hexColor[6:1]] %}
+
+    {{- red }},{{ green }},{{ blue -}}
+{% endmacro %}

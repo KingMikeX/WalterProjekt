@@ -1,0 +1,18 @@
+{
+  "additional_groks": [
+    {
+      "pattern": "%{GREEDYDATA} %{TIME:time} %{DATA:system} (?:[|]{1}) %{GREEDYDATA:json_message}",
+      "additional_tags": [
+        "grokFiltered"
+      ]
+    }
+  ],
+  "curator_retention_unit": "days",
+  "curator_retention_period": 90,
+  "filter": {
+    "json": {
+      "source": "json_message",
+      "target": "json_parsed"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+    {% import "@nucleus/o-media-preview.twig" as oMediaPreview %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-inline-media", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-inline-media",
+                    data.position | get_modifier("nuc-o-inline-media--position"),
+                    data.width | get_modifier("nuc-o-inline-media--width")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <article {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.objectPicture is not empty or data.objectMediaPreview is not empty %}
+                <div class="nuc-o-inline-media__container">
+                    {% if data.objectPicture is not empty %}
+                        {{ mPicture.render(data.objectPicture | merge_data({
+                            component: "nucleus/m-picture"
+                        })) }}
+                    {% else %}
+                        {{ oMediaPreview.render(data.objectMediaPreview | merge_data({
+                            component: "nucleus/o-media-preview"
+                        })) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+            <div class="nuc-o-inline-media__embedded">
+                {% if data.embedded is not empty %}
+                    {{ core.renderComponents(data.embedded) }}
+                {% endif %}
+            </div>
+        </article>
+    {% endif %}
+{% endmacro %}

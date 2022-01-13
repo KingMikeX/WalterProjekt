@@ -1,0 +1,52 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-textbody.twig" as aTextbody %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/o-locations", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "swrz-o-locations"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }} style="visibility: hidden;">
+            <div class="swrz-o-locations__wrapper">
+                <div class="swrz-o-locations__content">
+                    <{{ data.headlineLevel }} class="swrz-o-locations__headline">
+                    {{ data.textHeadline }}
+                </{{ data.headlineLevel }}>
+                {{ aTextbody.render(data.objectTextbody | merge_data({
+                    component: "nucleus/a-textbody",
+                    htmlAttributes: {
+                        class: "swrz-o-locations__textbody"
+                    },
+                    tag: "div"
+                })) }}
+            </div>
+            {% if data.embeddedItems | length > 1 %}
+                <div class="swrz-o-locations__brand-nav">
+                    {% for _item in data.embeddedItems %}
+                        <button class="swrz-o-locations__brand-nav-item" data-map-branch-trigger="{{ _item.nameBrand | lower }}">
+                            <img role="img" class="swrz-o-locations__brand-nav-item-logo" src="{{ _item.srcBrandLogo }}" alt="{{ _item.textAlternativeBrandLogo }}">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="swrz-o-locations__map">
+            {{ core.renderComponents(data.embeddedItems) }}
+        </div>
+        </div>
+    {% endif %}
+{% endmacro %}

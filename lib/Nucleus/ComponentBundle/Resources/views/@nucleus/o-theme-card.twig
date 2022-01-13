@@ -1,0 +1,57 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-theme-card") %}
+
+    {# Logic #}
+    {% set data = data | merge_data({
+        htmlAttributes: {
+            classList: [
+                "nuc-o-theme-card"
+            ]
+        }
+    }) %}
+
+    {# Markup #}
+    <article {{ render_attributes(data.htmlAttributes, null, data.extensions) }}>
+        {% set content %}
+            {{ mPicture.render ( data.objectPicture | merge_data ({
+                component: "nucleus/m-picture",
+                htmlAttributes: {
+                    class: "nuc-o-theme-card__picture"
+                }
+            })) }}
+            <span class="nuc-o-theme-card__content">
+                <{{ data.tagHeadline }} class="nuc-o-theme-card__headline">{{ data.textHeadline }}</{{ data.tagHeadline }}>
+                {% if data.textSubHeadline is not empty %}
+                    <span class="nuc-o-theme-card__subheadline">{{ data.textSubHeadline }}</span>
+                {% endif %}
+            </span>
+        {% endset %}
+
+        {% if data.objectAnchor is not empty %}
+            {{ aAnchor.render(data.objectAnchor | merge_data({
+                component: "nucleus/a-anchor",
+                htmlAttributes: {
+                    class: "nuc-o-theme-card__anchor"
+                },
+                embedded: [ content ]
+            })) }}
+        {% elseif data.objectButton is not empty %}
+            {{ aButton.render(data.objectButton | merge_data({
+                component: "nucleus/a-button",
+                htmlAttributes: {
+                    class: "nuc-o-theme-card__button"
+                },
+                embedded: [ content ]
+            })) }}
+        {% else %}
+            {{ content }}
+        {% endif %}
+    </article>
+{% endmacro %}

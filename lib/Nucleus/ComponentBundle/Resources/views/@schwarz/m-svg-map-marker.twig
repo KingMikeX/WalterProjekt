@@ -1,0 +1,51 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+    {% import "@nucleus/m-svg-map-marker.twig" as mSvgMapMarker %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-svg-map-marker", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "swrz-m-svg-map-marker"
+                ]
+            }
+        }) %}
+
+        {% set embeddedMarker %}
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    class: "swrz-m-svg-map-marker__icon"
+                },
+                size: "inherit",
+                id: data.icon
+            }) }}
+            <span class="swrz-m-svg-map-marker__text">{{ data.text }}</span>
+            {{ aIcon.render({
+                component: "nucleus/a-icon",
+                htmlAttributes: {
+                    class: "swrz-m-svg-map-marker__arrow"
+                },
+                id: "schwarz/arrow-right"
+            }) }}
+        {% endset %}
+
+        {# Markup #}
+        {{ mSvgMapMarker.render( data.objectMarker | merge_data ({
+            component: "nucleus/m-svg-map-marker",
+            htmlAttributes: data.htmlAttributes,
+            styleAttributes: data.styleAttributes,
+            extensions: data.extensions,
+            embedded: [ embeddedMarker ]
+        })) }}
+    {% endif %}
+{% endmacro %}

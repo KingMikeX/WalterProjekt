@@ -1,0 +1,3 @@
+twig:
+    # Symfony shows an exception whenever a Twig variable, attribute or method doesn’t exist
+    strict_variables: true

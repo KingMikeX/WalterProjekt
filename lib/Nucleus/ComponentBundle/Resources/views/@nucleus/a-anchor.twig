@@ -1,0 +1,40 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-anchor", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-anchor"
+                ],
+                href: data.urlReference,
+                target: data.target ? "_" ~ data.target : null,
+                title: data.textTitle,
+                "aria-current": data.ariaCurrent
+            }
+        }) %}
+
+        {% if data.objectGtmProductData is not empty and data.objectGtmPromotionData is not empty %}
+            {{ throw_exception("Only objectGtmProductData or objectGtmPromotionData must be privided in nucleus/a-anchor") }}
+        {% endif %}
+        {% if data.objectGtmProductData is not empty %}
+            {% set gtmData = data.objectGtmProductData | validate_data("nucleus/u-gtm-product-data") %}
+            {% set data = data | merge_gtm_data(gtmData) %}
+        {% elseif data.objectGtmPromotionData is not empty %}
+            {% set gtmData = data.objectGtmPromotionData | validate_data("nucleus/u-gtm-promotion-data") %}
+            {% set data = data | merge_gtm_data(gtmData) %}
+        {% endif %}
+
+        {# Markup #}
+        <a {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </a>
+    {% endif %}
+{% endmacro %}

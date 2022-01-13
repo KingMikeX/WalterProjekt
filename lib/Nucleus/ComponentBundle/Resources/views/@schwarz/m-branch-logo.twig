@@ -1,0 +1,31 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-image.twig" as aImage %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz/m-branch-logo", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scwz-m-branch-logo"
+                ]
+            }
+        }) %}
+
+        {% set urlImage = asset("assets/@schwarz/m-branch-logo/badge_" ~ data.branch ~ "_" ~ data.language ~ "_" ~ (data.isPositive ? 'positive' : 'negative') ~ ".svg", get_asset_namespace()) %}
+
+        {# Markup #}
+        {{ aImage.render(data | merge_data({
+            component: "nucleus/a-image",
+            urlSource: urlImage,
+            textAlternative: "Schwarz Badge"
+        })) }}
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,38 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-object.twig" as aObject %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-svg-map", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-svg-map",
+                    "nuc-o-svg-map--initialising"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ aObject.render({
+                component: "nucleus/a-object",
+                htmlAttributes: {
+                    class: "nuc-o-svg-map__map"
+                },
+                type: "image/svg+xml",
+                urlData: data.urlMapSvg
+            }) }}
+            <div class="nuc-o-svg-map__markers">
+                {{ core.renderComponents(data.embeddedMarkers) }}
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

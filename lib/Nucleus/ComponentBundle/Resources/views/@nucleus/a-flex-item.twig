@@ -1,0 +1,30 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-flex-item", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-flex-item",
+                    data.width | get_modifier("nuc-a-flex-item--width"),
+                    data.offset | get_modifier("nuc-a-flex-item--offset"),
+                    data.alignSelf | get_modifier("nuc-a-flex-item--align-self"),
+                    data.order | get_modifier("nuc-a-flex-item--order"),
+                    data.hasShowOverflow | get_modifier("nuc-a-flex-item--show-overflow")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <{{ data.tag }} {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {{ core.renderComponents(data.embedded) }}
+        </{{ data.tag }}>
+    {% endif %}
+{% endmacro %}

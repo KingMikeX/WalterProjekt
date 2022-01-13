@@ -1,0 +1,49 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-button.twig" as aButton %}
+    {% import "@nucleus/a-icon.twig" as aIcon %}
+
+    {# Validation #}
+    {% set data = data | validate_data("schwarz-group/m-gender-drawer", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "scgr-m-gender-drawer"
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            <div class="scgr-m-gender-drawer__body">
+                {{ aButton.render({
+                    component: "nucleus/a-button",
+                    htmlAttributes: {
+                        class: "scgr-m-gender-drawer__close-button"
+                    },
+                    textTitle: data.textCloseButtonTitle,
+                    embedded: [
+                        aIcon.render({
+                            component: "nucleus/a-icon",
+                            htmlAttributes: {
+                                class: "scgr-m-gender-drawer__close-icon"
+                            },
+                            size: "inherit",
+                            id: "nucleus/close"
+                        })
+                    ]
+                }) }}
+                <div class="scgr-m-gender-drawer__content">
+                    {{ core.renderComponents(data.embedded) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

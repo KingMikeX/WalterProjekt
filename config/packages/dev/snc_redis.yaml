@@ -1,0 +1,19 @@
+# doctrine caching with redis
+snc_redis:
+#    doctrine:
+#        metadata_cache:
+#            client: doctrine
+#            # the name of your entity_manager connection
+#            entity_manager: default
+#            # the name of your document_manager connection
+#            document_manager: default
+#        query_cache:
+#            client: doctrine
+#            entity_manager: default
+#        second_level_cache:
+#            client: doctrine
+#            entity_manager: default
+#        result_cache:
+#            client: doctrine
+#            # you may specify multiple entity_managers
+#            entity_manager: [default]

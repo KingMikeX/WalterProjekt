@@ -1,0 +1,19 @@
+
+# use the following route to redirect users to correct login page when wrongly requested
+
+#app_root:
+#    path: /
+#    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+#    defaults:
+#        path: /app/login
+#        permanent: true
+
+#app_root_login:
+#    path: /login
+#    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+#    defaults:
+#        path: /app/login
+#        permanent: true
+
+app_logout:
+    path: /logout

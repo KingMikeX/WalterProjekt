@@ -1,0 +1,23 @@
+includes:
+    - vendor/jangregor/phpstan-prophecy/src/extension.neon
+    - tools/phpstan-rules.neon
+
+parameters:
+    autoload_files:
+        - '%currentWorkingDirectory%/vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php'
+        - '%currentWorkingDirectory%/tools/phpunit.phar'
+    ignoreErrors:
+        - '#Call to an undefined method DOMNode::getElementsByTagName\(\).#'
+        - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\).#'
+        - '#Variable \$initialResponse might not be defined.#'
+        -
+            message: '#Lidl\\Tests\\Mock\\OldSound\\RabbitMqBundle\\RabbitMq\\DummyProducer::__construct\(\) does not call parent constructor from OldSound\\RabbitMqBundle\\RabbitMq\\BaseAmqp.#'
+            path: %currentWorkingDirectory%/tests/Mock/OldSound/RabbitMqBundle/RabbitMq/DummyProducer.php
+        -
+            message: '#Lidl\\Tests\\Mock\\ElasticSearch\\ClientMock::__construct\(\) does not call parent constructor from Elasticsearch\\Client.#'
+            path: %currentWorkingDirectory%/tests/Mock/ElasticSearch/ClientMock.php
+
+    paths:
+        - src
+        - tests
+    tmpDir: %currentWorkingDirectory%/build/phpstan/

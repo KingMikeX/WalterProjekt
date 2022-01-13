@@ -1,0 +1,42 @@
+{% macro render(data) %}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/a-textbody", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-a-textbody",
+                    data.type | get_modifier("nuc-a-textbody--type"),
+                    data.theme | get_modifier("nuc-a-textbody--theme"),
+                    data.tableStyle | get_modifier("nuc-a-textbody--table-style"),
+                    data.levelShift | get_modifier("nuc-a-textbody--level-shift-up", {additionalCondition: data.levelShift > 0 and data.levelShift <= 5}),
+                    data.levelShift | abs | get_modifier("nuc-a-textbody--level-shift-down", {additionalCondition: data.levelShift < 0 and data.levelShift >= -5}),
+                    data.align | get_modifier("nuc-a-textbody--align"),
+                    data.hasNoBottomMargin | get_modifier("nuc-a-textbody--no-bottom-margin")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <{{ data.tag }} {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.embedded is not empty %}
+                {% for embeddedElement in data.embedded %}
+                    {% if embeddedElement.component is defined %}
+                        {{ core.renderComponent(embeddedElement) }}
+                    {% else %}
+                        {{ embeddedElement | replace({'<table': '<div class="nuc-a-textbody__table-wrapper"><table', '</table>': '</table></div>'}) | raw }}
+                    {% endif %}
+                {% endfor %}
+            {% elseif data.content is not empty %}
+                <p>{{ core.renderContent(data.content, data.isRawContent) }}</p>
+            {% endif %}
+        </{{ data.tag }}>
+    {% endif %}
+{% endmacro %}

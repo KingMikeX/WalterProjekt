@@ -1,0 +1,82 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+    {% import "@nucleus/a-anchor.twig" as aAnchor %}
+    {% import "@nucleus/m-picture.twig" as mPicture %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-card", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-card",
+                    data.theme | get_modifier("nuc-o-card--theme", {property: "theme", omitDefaultModifier: true})
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <article {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% set content %}
+                {% if data.objectPicture is not empty %}
+                    <div class="nuc-o-card__picture-container">
+                        {{ mPicture.render ( data.objectPicture | merge_data ({
+                            component: "nucleus/m-picture",
+                            htmlAttributes: {
+                                class: "nuc-o-card__picture"
+                            }
+                        })) }}
+                        {% if data.embeddedOverlay is not empty %}
+                            <div class="nuc-o-card__overlay">
+                                {{ core.renderComponents(data.embeddedOverlay) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="nuc-o-card__body">
+                    <header class="nuc-o-card__head">
+                        <{{ data.tagHeadline }} class="nuc-o-card__headline">{{ data.textHeadline }}</{{ data.tagHeadline }}>
+                        {% if data.textSubHeadline is not empty %}
+                            <small class="nuc-o-card__subheadline">{{ data.textSubHeadline }}</small>
+                        {% endif %}
+                    </header>
+                    {% if data.contentDescription is not empty %}
+                        <p class="nuc-o-card__content">
+                            {{ core.renderContent(data.contentDescription, data.isRawContentDescription) }}
+                        </p>
+                    {% endif %}
+                    {% if data.embedded is not empty %}
+                        <div class="nuc-o-card__embedded">
+                            {{ core.renderComponents(data.embedded) }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if data.embeddedFooter is not empty %}
+                    <div class="nuc-o-card__footer">
+                        {{ core.renderComponents(data.embeddedFooter) }}
+                    </div>
+                {% endif %}
+            {% endset %}
+
+            {% if data.objectAnchor is not empty %}
+                {{ aAnchor.render(data.objectAnchor | merge_data ({
+                    component: "nucleus/a-anchor",
+                    htmlAttributes: {
+                        class: "nuc-o-card__link"
+                    },
+                    embedded: [ content ]
+                })) }}
+            {% else %}
+                <div class="nuc-o-card__link-dummy">
+                    {{ content | raw }}
+                </div>
+            {% endif %}
+        </article>
+    {% endif %}
+{% endmacro %}

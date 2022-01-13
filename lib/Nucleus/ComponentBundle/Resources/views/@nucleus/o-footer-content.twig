@@ -1,0 +1,32 @@
+{% macro render(data) %}
+    {# Imports #}
+    {% import "@nucleus/_core.twig" as core %}
+
+    {# Validation #}
+    {% set data = data | validate_data("nucleus/o-footer-content", false) %}
+    {% if data._validation.hasErrors or data._validation.hasWarnings %}
+        {{ core.renderValidationResults(data) }}
+    {% endif %}
+
+    {% if not data._validation.hasErrors %}
+        {# Logic #}
+        {% set data = data | merge_data({
+            htmlAttributes: {
+                classList: [
+                    "nuc-o-footer-content",
+                    (data.tagEmbedded == "ul") | get_modifier("nuc-o-footer-content--nav-list")
+                ]
+            }
+        }) %}
+
+        {# Markup #}
+        <div {{ render_attributes(data.htmlAttributes, data.styleAttributes, data.extensions) }}>
+            {% if data.textHeadline is not empty %}
+                <span class="nuc-o-footer-content__headline">{{ data.textHeadline }}</span>
+            {% endif %}
+            <{{ data.tagEmbedded }} class="nuc-o-footer-content__embedded">
+                {{ core.renderComponents(data.embedded) }}
+            </{{ data.tagEmbedded }}>
+        </div>
+    {% endif %}
+{% endmacro %}
