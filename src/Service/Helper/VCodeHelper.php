@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\Helper;
 
 
 use App\Repository\VCodeRepository;

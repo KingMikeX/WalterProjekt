@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Helper;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,5 +40,17 @@ class UserHelper
         }else{
             return false;
         }
+    }
+
+    public function getUserbyID($id){
+        $user = $this->userRepo->findBy([
+            'id'=>$id
+        ]);
+        yield $user;
+    }
+
+    public function getAllUser(){
+        $users = $this->userRepo->findAll();
+        return $users;
     }
 }

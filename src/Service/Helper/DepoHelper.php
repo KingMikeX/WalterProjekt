@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Entity\Helper;
+namespace App\Service\Helper;
 
 use App\Repository\DeposRepository;
 use App\Repository\UserRepository;

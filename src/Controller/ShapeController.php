@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class ShapeController extends AbstractController
 {
-    private UserRepository $userRepository;
+    /* private UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
@@ -22,6 +22,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
+    /*
     public function index(): Response
     {
         try{
@@ -45,9 +46,10 @@ class HomeController extends AbstractController
     /**
      * @Route("/inaktiv", name="inaktiv")
      */
+    /*
     public function inaktiv(): Response
     {
         $this->addFlash('error', 'Dieser Nutzer ist Inaktiv gestellt worden. Melde dich beim Admin.');
         return new RedirectResponse($this->generateUrl('app_logout'));
-    }
+    }*/
 }

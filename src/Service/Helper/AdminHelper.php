@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Helper;
 
 
 use _HumbugBox373c0874430e\phpDocumentor\Reflection\Types\Integer;

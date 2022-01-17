@@ -11,6 +11,7 @@ security:
 
 
 
+
     role_hierarchy:
         ROLE_ADMIN:        [ROLE_USER]
         ROLE_SUPER_ADMIN:  [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -24,7 +25,8 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
+        # used to reload user from session & other features (e.g. switch_user)
         # used to reload user from session & other features (e.g. switch_user)
 
     access_denied_url: app_login
@@ -51,6 +53,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\CustomAuthenticator
+                    - App\Security\AppAuthenticator
+                entry_point: App\Security\AppAuthenticator
             # ...
             remember_me:
                 secret: '%kernel.secret%'
